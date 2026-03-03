@@ -19,11 +19,22 @@ export const routes: Routes = [
     canActivate: [publicGuard],
     loadComponent: () => import('./features/registration/registration.component').then(m => m.RegistrationComponent),
   },
-  // Pages protégées
+  // Dashboard — redirect
   {
     path: 'dashboard',
     canActivate: [authGuard],
-    loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    children: [
+      {
+        path: 'eleve',
+        loadComponent: () => import('./features/dashboard/eleve/eleve-dashboard.component').then(m => m.EleveDashboardComponent),
+        children: [
+          { path: 'accueil', loadComponent: () => import('./features/dashboard/eleve/accueil/eleve-accueil.component').then(m => m.EleveAccueilComponent) },
+          { path: 'taches',  loadComponent: () => import('./features/dashboard/eleve/taches/eleve-taches.component').then(m => m.EleveTachesComponent) },
+          { path: '', redirectTo: 'accueil', pathMatch: 'full' },
+        ],
+      },
+      { path: '', redirectTo: 'eleve', pathMatch: 'full' },
+    ],
   },
   { path: '**', redirectTo: '' },
 ];

@@ -1,0 +1,69 @@
+<div class="page">
+
+  <header class="page-header">
+    <div>
+      <h1>Bonjour 👋</h1>
+      <p class="subtitle">Voici un résumé de tes dernières activités</p>
+    </div>
+    <span class="badge-role">Élève</span>
+  </header>
+
+  <!-- Stats rapides -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-value">{{ tachesEnCours.length }}</span>
+      <span class="stat-label">Tâche(s) à faire</span>
+    </div>
+    <div class="stat-card stat-card--done">
+      <span class="stat-value">{{ tachesTerminees.length }}</span>
+      <span class="stat-label">Tâche(s) terminée(s)</span>
+    </div>
+    <div class="stat-card stat-card--progress">
+      <span class="stat-value">{{ progression }} %</span>
+      <span class="stat-label">Progression globale</span>
+    </div>
+  </div>
+
+  <!-- Barre de progression -->
+  @if (tasks().length > 0) {
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" [style.width.%]="progression"></div>
+      </div>
+      <span class="progress-label">{{ progression }} % des tâches complétées</span>
+    </div>
+  }
+
+  <!-- Tâches récentes -->
+  <section class="section">
+    <div class="section-head">
+      <h2>Tâches à faire</h2>
+      <a routerLink="../taches" class="see-all">Voir tout →</a>
+    </div>
+
+    @if (tachesEnCours.length === 0) {
+      <div class="empty-state">
+        <span class="empty-icon">🎉</span>
+        <p>Aucune tâche en attente. Bravo !</p>
+      </div>
+    } @else {
+      <ul class="task-list">
+        @for (task of tachesEnCours.slice(0, 5); track task.id) {
+          <li class="task-item">
+            <span class="task-dot"></span>
+            <div class="task-info">
+              <p class="task-titre">{{ task.titre }}</p>
+              @if (task.description) {
+                <p class="task-desc">{{ task.description }}</p>
+              }
+            </div>
+            @if (task.dateEcheance) {
+              <span class="task-date">{{ task.dateEcheance | date:'d MMM' }}</span>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+</div>
