@@ -17,7 +17,7 @@ export const routes: Routes = [
     path: '',
     canActivate: [authGuard],
     children: [
-      // TODO: ajouter dashboard, chat, calendar, tasks
+      { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },

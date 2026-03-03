@@ -48,4 +48,14 @@ export class AuthService {
   get isLoggedIn(): boolean {
     return !!this.auth.currentUser;
   }
+
+  get currentUserId(): string | null {
+    return this.auth.currentUser?.uid ?? null;
+  }
+
+  get currentUserRole(): 'eleve' | 'benevole' {
+    // La récupération précise du rôle se fait via Firestore ;
+    // ici on renvoie une valeur par défaut safe pendant le chargement.
+    return 'eleve';
+  }
 }
