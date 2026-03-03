@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -18,8 +18,8 @@ export class LoginComponent {
   private router = inject(Router);
 
   // État du composant
-  isLoading = signal(false);
-  errorMessage = signal<string | null>(null);
+  isLoading = signal(false); // Indique si une requête de connexion est en cours
+  errorMessage = signal<string | null>(null); // Message d'erreur à afficher en cas d'échec de connexion
 
   // Définition du formulaire avec ses validations
   form = this.fb.group({
