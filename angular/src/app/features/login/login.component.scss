@@ -1,32 +1,146 @@
-.login-page {
+// ---- Layout splitscreen ----
+.auth-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   min-height: 100vh;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ---- Panneau gauche (branding) ----
+.auth-panel {
+  background: #111111;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px 48px 48px;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: 860px) { display: none; }
+
+  // Cercles décoratifs
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    opacity: .15;
+  }
+  &::before {
+    width: 420px; height: 420px;
+    background: #D4FF3F;
+    top: -140px; right: -120px;
+  }
+  &::after {
+    width: 260px; height: 260px;
+    background: #D4FF3F;
+    bottom: 60px; left: -80px;
+  }
+}
+
+.panel-logo {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  position: relative;
+  z-index: 1;
+
+  span { color: #D4FF3F; }
+}
+
+.panel-body {
+  position: relative;
+  z-index: 1;
+
+  h2 {
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.15;
+    margin-bottom: 20px;
+
+    .highlight {
+      color: #D4FF3F;
+    }
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255,255,255,.6);
+    max-width: 340px;
+  }
+}
+
+.panel-testimonial {
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 24px;
+
+  blockquote {
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.6;
+    color: rgba(255,255,255,.85);
+    margin-bottom: 12px;
+  }
+
+  cite {
+    font-size: 13px;
+    font-style: normal;
+    color: rgba(255,255,255,.45);
+  }
+}
+
+// ---- Panneau droit (formulaire) ----
+.auth-form-side {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--background);
+  padding: 40px 24px;
+  background: var(--background);
 }
 
-.login-card {
+.auth-card {
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
   background: var(--surface);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: 40px;
+  padding: 40px 44px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+
+  @media (max-width: 480px) { padding: 32px 24px; }
 }
 
-.login-header {
+.auth-header {
+  a.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--foreground-muted);
+    margin-bottom: 24px;
+    transition: color .15s;
+    &:hover { color: var(--foreground); }
+  }
+
   h1 {
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 800;
-    letter-spacing: -0.5px;
+    letter-spacing: -1px;
     line-height: 1.1;
   }
   p {
-    margin-top: 4px;
+    margin-top: 6px;
     font-size: 14px;
     color: var(--foreground-muted);
   }
@@ -40,34 +154,46 @@
   font-size: 14px;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .field {
   display: flex;
   flex-direction: column;
   gap: 6px;
 
   label {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--foreground);
   }
 
   input {
-    height: 44px;
-    border: 1px solid var(--input);
+    height: 48px;
+    border: 1.5px solid var(--input);
     border-radius: var(--radius-md);
     padding: 0 16px;
-    font-size: 14px;
+    font-size: 15px;
     font-family: 'Inter', sans-serif;
+    background: var(--background);
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color .15s, box-shadow .15s;
 
     &:focus {
       border-color: var(--ring);
-      border-width: 2px;
+      box-shadow: 0 0 0 3px rgba(17,17,17,.08);
+      background: #fff;
     }
 
     &.invalid {
       border-color: var(--destructive);
+      box-shadow: 0 0 0 3px rgba(239,68,68,.08);
     }
+
+    &::placeholder { color: #C0C4CE; }
   }
 }
 
@@ -116,8 +242,24 @@
   font-family: 'Inter', sans-serif;
   cursor: pointer;
   text-align: center;
-  text-decoration: underline;
+  text-decoration: none;
   padding: 0;
+  transition: color .15s;
 
   &:hover { color: var(--foreground); }
+
+  strong { font-weight: 700; color: var(--foreground); }
+}
+
+.auth-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-top: 4px;
+  border-top: 1px solid var(--input);
+}
+
+form button[type=submit] {
+  margin-top: 8px;
 }

@@ -3,6 +3,12 @@ import { authGuard } from './core/guards/auth.guard';
 import { publicGuard } from './core/guards/public.guard';
 
 export const routes: Routes = [
+  // Page publique d'accueil
+  {
+    path: '',
+    loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
+  },
+  // Pages auth (redirige vers dashboard si déjà connecté)
   {
     path: 'login',
     canActivate: [publicGuard],
@@ -13,14 +19,12 @@ export const routes: Routes = [
     canActivate: [publicGuard],
     loadComponent: () => import('./features/registration/registration.component').then(m => m.RegistrationComponent),
   },
+  // Pages protégées
   {
-    path: '',
+    path: 'dashboard',
     canActivate: [authGuard],
-    children: [
-      { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent) },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    ],
+    loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
   },
-  { path: '**', redirectTo: 'login' },
+  { path: '**', redirectTo: '' },
 ];
 

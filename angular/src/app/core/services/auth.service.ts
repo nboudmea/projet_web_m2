@@ -1,13 +1,16 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, authState, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore, doc, setDoc, serverTimestamp } from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private auth = inject(Auth); // récupère la connexion Firebase Auth injectée dans app.config.ts
-  private firestore = inject(Firestore); // récupère la connexion à la base de données Firestore injectée dans app.config.ts
+  private auth = inject(Auth);
+  private firestore = inject(Firestore);
+
+  /** Observable Firebase Auth — null = non connecté, FirebaseUser = connecté */
+  readonly currentUser$ = authState(this.auth);
 
   login(email: string, password: string): Promise<void> {
     return signInWithEmailAndPassword(this.auth, email, password)
