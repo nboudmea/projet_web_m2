@@ -10,6 +10,7 @@
 /node_modules
 npm-debug.log
 yarn-error.log
+package-lock.json
 
 # IDEs and editors
 .idea/
@@ -42,3 +43,11 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Firebase — clés secrètes à ne jamais commiter
+src/environments/environment.ts
+src/environments/environment.prod.ts
+
+# Logs
+*.log
+logs/
