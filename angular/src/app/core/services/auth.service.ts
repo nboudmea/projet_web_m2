@@ -6,27 +6,43 @@ import { User } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private auth = inject(Auth);
-  private firestore = inject(Firestore);
+  private auth = inject(Auth); // récupère la connexion Firebase Auth injectée dans app.config.ts
+  private firestore = inject(Firestore); // récupère la connexion à la base de données Firestore injectée dans app.config.ts
 
-  // TODO: implémenter login()
   login(email: string, password: string): Promise<void> {
-    return Promise.resolve();
+    return signInWithEmailAndPassword(this.auth, email, password)
+      .then(() => {
+        console.log('Connexion réussie');
+      })
+      .catch(error => {
+        console.error('Erreur de connexion:', error);
+        throw error;
+      });
   }
 
-  // TODO: implémenter logout()
   logout(): Promise<void> {
-    return Promise.resolve();
+    return signOut(this.auth);
   }
 
-  // TODO: implémenter register()
   register(email: string, password: string, role: 'eleve' | 'benevole'): Promise<void> {
-    return Promise.resolve();
+    return createUserWithEmailAndPassword(this.auth, email, password)
+      .then(userCredential => {
+        const user = userCredential.user;
+        const userDoc = doc(this.firestore, `users/${user.uid}`);
+        return setDoc(userDoc, {
+          email: user.email,
+          role: role,
+          createdAt: serverTimestamp(),
+        });
+      })
+      .catch(error => {
+        console.error('Erreur d\'inscription:', error);
+        throw error;
+      });
   }
 
-  // TODO: implémenter resetPassword()
   resetPassword(email: string): Promise<void> {
-    return Promise.resolve();
+    return sendPasswordResetEmail(this.auth, email);
   }
 
   get isLoggedIn(): boolean {
