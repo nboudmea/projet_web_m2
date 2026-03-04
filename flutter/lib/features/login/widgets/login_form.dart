@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/providers/auth_providers.dart';
 import '../../../core/services/auth_service.dart';
 
@@ -100,10 +101,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
-              labelText: 'Adresse email',
-              hintText: 'exemple@mail.com',
-              prefixIcon: Icon(Icons.email_outlined),
-              border: OutlineInputBorder(),
+              labelText: 'Email',
+              hintText: 'ton@email.com',
             ),
             validator: (v) {
               if (v == null || v.isEmpty) return 'L\'email est requis.';
@@ -122,8 +121,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             onFieldSubmitted: (_) => _onSubmit(),
             decoration: InputDecoration(
               labelText: 'Mot de passe',
-              prefixIcon: const Icon(Icons.lock_outlined),
-              border: const OutlineInputBorder(),
+              hintText: '••••••••',
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscurePassword
@@ -144,36 +142,63 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           ),
           const SizedBox(height: 8),
 
-          // ── Mot de passe oublié ────────────────────────────────────────────
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: _onForgotPassword,
-              child: const Text('Mot de passe oublié ?'),
+          // ── Bouton de connexion ────────────────────────────────────────────
+          const SizedBox(height: 8),
+          GestureDetector(
+            onTap: _isLoading ? null : _onSubmit,
+            child: Opacity(
+              opacity: _isLoading ? 0.5 : 1.0,
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 20, right: 8, top: 12, bottom: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.foreground,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _isLoading ? 'Connexion...' : 'Se connecter',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: const BoxDecoration(
+                        color: AppColors.accent,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.arrow_forward,
+                        color: AppColors.accentForeground,
+                        size: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 16),
 
-          // ── Bouton de connexion ────────────────────────────────────────────
-          FilledButton(
-            onPressed: _isLoading ? null : _onSubmit,
-            style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              backgroundColor: const Color(0xFF4C6FFF),
+          // ── Mot de passe oublié ────────────────────────────────────────────
+          const SizedBox(height: 12),
+          GestureDetector(
+            onTap: _onForgotPassword,
+            child: const Text(
+              'Mot de passe oublié ?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                color: AppColors.mutedForeground,
+                fontFamily: 'Inter',
+              ),
             ),
-            child: _isLoading
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : const Text(
-                    'Se connecter',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
           ),
         ],
       ),

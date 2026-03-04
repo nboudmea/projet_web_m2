@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/providers/auth_providers.dart';
 import '../../../core/services/auth_service.dart';
 
@@ -79,10 +80,8 @@ class _RegistrationFormState extends ConsumerState<RegistrationForm> {
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
-              labelText: 'Adresse email',
-              hintText: 'exemple@mail.com',
-              prefixIcon: Icon(Icons.email_outlined),
-              border: OutlineInputBorder(),
+              labelText: 'Email',
+              hintText: 'ton@email.com',
             ),
             validator: (v) {
               if (v == null || v.isEmpty) return 'L\'email est requis.';
@@ -100,8 +99,7 @@ class _RegistrationFormState extends ConsumerState<RegistrationForm> {
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
               labelText: 'Mot de passe',
-              prefixIcon: const Icon(Icons.lock_outlined),
-              border: const OutlineInputBorder(),
+              hintText: '••••••••',
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscurePassword
@@ -130,8 +128,7 @@ class _RegistrationFormState extends ConsumerState<RegistrationForm> {
             onFieldSubmitted: (_) => _onSubmit(),
             decoration: InputDecoration(
               labelText: 'Confirmer le mot de passe',
-              prefixIcon: const Icon(Icons.lock_outlined),
-              border: const OutlineInputBorder(),
+              hintText: '••••••••',
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscureConfirm
@@ -155,12 +152,14 @@ class _RegistrationFormState extends ConsumerState<RegistrationForm> {
           const SizedBox(height: 20),
 
           // ── Sélection du rôle ──────────────────────────────────────────────
-          Text(
-            'Je suis…',
-            style: Theme.of(context)
-                .textTheme
-                .labelLarge
-                ?.copyWith(fontWeight: FontWeight.w600),
+          const Text(
+            'Je suis',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: AppColors.foreground,
+              fontFamily: 'Inter',
+            ),
           ),
           const SizedBox(height: 8),
           _RoleSelector(
@@ -170,25 +169,47 @@ class _RegistrationFormState extends ConsumerState<RegistrationForm> {
           const SizedBox(height: 24),
 
           // ── Bouton d'inscription ───────────────────────────────────────────
-          FilledButton(
-            onPressed: _isLoading ? null : _onSubmit,
-            style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              backgroundColor: const Color(0xFF4C6FFF),
-            ),
-            child: _isLoading
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
+          const SizedBox(height: 8),
+          GestureDetector(
+            onTap: _isLoading ? null : _onSubmit,
+            child: Opacity(
+              opacity: _isLoading ? 0.5 : 1.0,
+              child: Container(
+                padding: const EdgeInsets.only(
+                    left: 20, right: 8, top: 12, bottom: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.foreground,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _isLoading ? 'Création...' : 'Créer mon compte',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                      ),
                     ),
-                  )
-                : const Text(
-                    'Créer mon compte',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: const BoxDecoration(
+                        color: AppColors.accent,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.arrow_forward,
+                        color: AppColors.accentForeground,
+                        size: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -211,18 +232,14 @@ class _RoleSelector extends StatelessWidget {
         Expanded(
           child: _RoleTile(
             label: 'Élève',
-            description: 'Je cherche un soutien scolaire',
-            icon: Icons.school_outlined,
             selected: value == 'eleve',
             onTap: () => onChanged('eleve'),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
         Expanded(
           child: _RoleTile(
             label: 'Bénévole',
-            description: 'Je veux aider un élève',
-            icon: Icons.volunteer_activism_outlined,
             selected: value == 'benevole',
             onTap: () => onChanged('benevole'),
           ),
@@ -235,50 +252,44 @@ class _RoleSelector extends StatelessWidget {
 class _RoleTile extends StatelessWidget {
   const _RoleTile({
     required this.label,
-    required this.description,
-    required this.icon,
     required this.selected,
     required this.onTap,
   });
 
   final String label;
-  final String description;
-  final IconData icon;
   final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final color = selected ? const Color(0xFF4C6FFF) : Colors.grey.shade400;
+    final borderColor =
+        selected ? AppColors.foreground : AppColors.input;
+    final bgColor =
+        selected ? const Color(0xFFF0F0F0) : Colors.transparent;
 
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(16),
+        duration: const Duration(milliseconds: 150),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color, width: selected ? 2 : 1),
-          color: selected
-              ? const Color(0xFF4C6FFF).withAlpha(13)
-              : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+              color: borderColor, width: selected ? 1.5 : 1.5),
+          color: bgColor,
         ),
-        child: Column(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: color, size: 28),
-            const SizedBox(height: 8),
             Text(
               label,
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: selected ? const Color(0xFF4C6FFF) : Colors.black87,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Inter',
+                color: AppColors.foreground,
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              description,
-              style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
-              textAlign: TextAlign.center,
             ),
           ],
         ),
