@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^1.0.8
 
   # Navigation
@@ -47,6 +49,9 @@ dependencies:
 
   # HTTP client
   dio: ^5.7.0
+
+  # Google Fonts (Inter)
+  google_fonts: ^6.2.1
 
   # Utilities
   intl: ^0.20.0
