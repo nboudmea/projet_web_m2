@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Auth, authState, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore, doc, setDoc, getDoc, getDocs, collection, query, where, serverTimestamp } from '@angular/fire/firestore';
-import { from, Observable, of, switchMap, map } from 'rxjs';
+import { Observable, of, switchMap, from, map } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
@@ -18,10 +18,7 @@ export class AuthService {
       if (!firebaseUser) return of(null);
       const ref = doc(this.firestore, `users/${firebaseUser.uid}`);
       return from(getDoc(ref)).pipe(
-        map(snapshot => snapshot.exists()
-          ? ({ id: snapshot.id, ...snapshot.data() } as User)
-          : null
-        )
+        map(snap => snap.exists() ? ({ id: snap.id, ...snap.data() } as User) : null)
       );
     })
   );

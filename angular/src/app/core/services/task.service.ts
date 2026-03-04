@@ -41,10 +41,12 @@ export class TaskService {
   }
 
   createTask(task: Omit<Task, 'id'>): Promise<void> {
-    return addDoc(collection(this.firestore, 'tasks'), {
-      ...task,
-      createdAt: serverTimestamp(),
-    }).then(() => undefined);
+    // Firestore n'accepte pas les valeurs undefined — on les retire
+    const data = Object.fromEntries(
+      Object.entries({ ...task, createdAt: serverTimestamp() })
+        .filter(([, v]) => v !== undefined)
+    );
+    return addDoc(collection(this.firestore, 'tasks'), data).then(() => undefined);
   }
 
   deleteTask(taskId: string): Promise<void> {
