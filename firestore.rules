@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Lecture publique aux authentifiés (nécessaire pour lire la liste des
+    // bénévoles lors de l'inscription et les élèves d'un bénévole).
+    // Écriture : uniquement son propre document.
+    match /users/{userId} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Seuls les participants peuvent lire/écrire les messages
+    match /messages/{messageId} {
+      allow read, write: if request.auth != null &&
+        (resource.data.expediteurId == request.auth.uid ||
+         resource.data.destinataireId == request.auth.uid);
+    }
+
+    // Tâches : création libre (authentifié), lecture/modif/suppression
+    // uniquement pour l'assigné ou le créateur.
+    match /tasks/{taskId} {
+      allow create: if request.auth != null;
+      allow read, update, delete: if request.auth != null &&
+        (resource.data.assigneeId == request.auth.uid ||
+         resource.data.createurId == request.auth.uid);
+    }
+
+    // Seuls les participants peuvent accéder aux événements
+    match /events/{eventId} {
+      allow read, write: if request.auth != null &&
+        request.auth.uid in resource.data.participantsIds;
+    }
+  }
+}

@@ -9,6 +9,25 @@
   </header>
 
   <!-- Stats rapides -->
+  <!-- Card bénévole -->
+  @if (benevole()) {
+    <div class="benevole-card">
+      <div class="benevole-avatar">{{ nomBenevole(benevole()!).charAt(0).toUpperCase() }}</div>
+      <div class="benevole-info">
+        <p class="benevole-label">Ton bénévole</p>
+        <p class="benevole-nom">{{ nomBenevole(benevole()!) }}</p>
+        <p class="benevole-email">{{ benevole()!.email }}</p>
+      </div>
+      <span class="benevole-badge">👨‍🏫 Bénévole</span>
+    </div>
+  } @else {
+    <div class="benevole-card benevole-card--empty">
+      <span class="benevole-empty-icon">⏳</span>
+      <p>Aucun bénévole assigné pour le moment.</p>
+    </div>
+  }
+
+  <!-- Stats rapides -->
   <div class="stats-row">
     <div class="stat-card">
       <span class="stat-value">{{ tachesEnCours.length }}</span>

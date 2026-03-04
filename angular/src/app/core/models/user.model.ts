@@ -5,4 +5,6 @@ export interface User {
   email: string;
   role: 'eleve' | 'benevole';
   photoUrl?: string;
+  /** Renseigné sur le document d'un élève : UID du bénévole qui le suit */
+  benevoleId?: string;
 }

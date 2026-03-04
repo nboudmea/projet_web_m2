@@ -209,3 +209,80 @@ $radius: 20px;
   .empty-icon { font-size: 36px; }
   p { font-size: 15px; color: $muted; }
 }
+
+// ---- CARD BÉNÉVOLE ----
+.benevole-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: $dark;
+  color: #fff;
+  border-radius: $radius;
+  padding: 20px 24px;
+
+  &--empty {
+    background: #fff;
+    color: $muted;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.05);
+    font-size: 14px;
+
+    .benevole-empty-icon { font-size: 22px; }
+    p { margin: 0; }
+  }
+}
+
+.benevole-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: $lime;
+  color: $dark;
+  font-size: 20px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.benevole-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.benevole-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,.5);
+  margin: 0 0 2px;
+}
+
+.benevole-nom {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.benevole-email {
+  font-size: 13px;
+  color: rgba(255,255,255,.55);
+  margin: 2px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.benevole-badge {
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255,255,255,.1);
+  color: $lime;
+  padding: 6px 14px;
+  border-radius: 50px;
+  flex-shrink: 0;
+}

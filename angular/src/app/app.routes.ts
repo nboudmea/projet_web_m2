@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { publicGuard } from './core/guards/public.guard';
+import { roleRedirectGuard } from './core/guards/role-redirect.guard';
 
 export const routes: Routes = [
   // Page publique d'accueil
@@ -19,11 +20,12 @@ export const routes: Routes = [
     canActivate: [publicGuard],
     loadComponent: () => import('./features/registration/registration.component').then(m => m.RegistrationComponent),
   },
-  // Dashboard — redirect
+  // Dashboard — redirection selon rôle + sous-dashboards
   {
     path: 'dashboard',
     canActivate: [authGuard],
     children: [
+      // Dashboard élève
       {
         path: 'eleve',
         loadComponent: () => import('./features/dashboard/eleve/eleve-dashboard.component').then(m => m.EleveDashboardComponent),
@@ -33,7 +35,23 @@ export const routes: Routes = [
           { path: '', redirectTo: 'accueil', pathMatch: 'full' },
         ],
       },
-      { path: '', redirectTo: 'eleve', pathMatch: 'full' },
+      // Dashboard bénévole
+      {
+        path: 'benevole',
+        loadComponent: () => import('./features/dashboard/benevole/benevole-dashboard.component').then(m => m.BenevoleDashboardComponent),
+        children: [
+          { path: 'accueil', loadComponent: () => import('./features/dashboard/benevole/accueil/benevole-accueil.component').then(m => m.BenevoleAccueilComponent) },
+          { path: 'taches',  loadComponent: () => import('./features/dashboard/benevole/taches/benevole-taches.component').then(m => m.BenevoleTachesComponent) },
+          { path: '', redirectTo: 'accueil', pathMatch: 'full' },
+        ],
+      },
+      // Redirection par rôle depuis /dashboard
+      {
+        path: '',
+        canActivate: [roleRedirectGuard],
+        loadComponent: () => import('./features/dashboard/role-redirect.component').then(m => m.RoleRedirectComponent),
+        pathMatch: 'full',
+      },
     ],
   },
   { path: '**', redirectTo: '' },

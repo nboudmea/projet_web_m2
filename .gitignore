@@ -1,0 +1,38 @@
+# ─── Angular ──────────────────────────────────────────────────────────────────
+angular/node_modules/
+angular/dist/
+angular/.angular/
+angular/.env
+
+# Clés Firebase — NE PAS versionner
+angular/src/environments/environment.ts
+angular/src/environments/environment.prod.ts
+
+# ─── Flutter ──────────────────────────────────────────────────────────────────
+flutter/.dart_tool/
+flutter/.flutter-plugins
+flutter/.flutter-plugins-dependencies
+flutter/build/
+flutter/.env
+
+# Clés Firebase — NE PAS versionner
+flutter/android/app/google-services.json
+flutter/ios/Runner/GoogleService-Info.plist
+flutter/lib/firebase_options.dart
+
+# ─── Firebase ─────────────────────────────────────────────────────────────────
+# firebase.json et firestore.rules → OK à versionner (pas de secrets)
+.firebase/          # cache local CLI
+firebase-debug.log
+firestore-debug.log
+storage-debug.log
+
+# Clé de compte de service (Admin SDK)
+*-service-account*.json
+serviceAccountKey.json
+
+# ─── OS / Éditeurs ────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+*.log

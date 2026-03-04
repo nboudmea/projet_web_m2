@@ -1,0 +1,59 @@
+<div class="page">
+
+  <header class="page-header">
+    <div>
+      <h1>Bonjour 👋</h1>
+      <p class="subtitle">Vue d'ensemble de vos élèves et tâches</p>
+    </div>
+    <span class="badge-role">Bénévole</span>
+  </header>
+
+  <!-- Stats rapides -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-value">{{ eleves().length }}</span>
+      <span class="stat-label">Élève(s) suivi(s)</span>
+    </div>
+    <div class="stat-card stat-card--pending">
+      <span class="stat-value">{{ tachesEnCours.length }}</span>
+      <span class="stat-label">Tâche(s) en cours</span>
+    </div>
+    <div class="stat-card stat-card--done">
+      <span class="stat-value">{{ tachesTerminees.length }}</span>
+      <span class="stat-label">Tâche(s) terminée(s)</span>
+    </div>
+  </div>
+
+  <!-- Liste des élèves -->
+  <section class="section">
+    <div class="section-head">
+      <h2>Mes élèves</h2>
+      <a routerLink="../taches" class="see-all">Assigner une tâche →</a>
+    </div>
+
+    @if (eleves().length === 0) {
+      <div class="empty-state">
+        <span class="empty-icon">🎓</span>
+        <p>Aucun élève ne vous est encore assigné.</p>
+      </div>
+    } @else {
+      <ul class="eleve-list">
+        @for (eleve of eleves(); track eleve.id) {
+          <li class="eleve-card">
+            <div class="eleve-avatar">
+              {{ nomEleve(eleve).charAt(0).toUpperCase() }}
+            </div>
+            <div class="eleve-info">
+              <p class="eleve-nom">{{ nomEleve(eleve) }}</p>
+              <p class="eleve-email">{{ eleve.email }}</p>
+            </div>
+            <span class="eleve-badge" [class.eleve-badge--zero]="tachesCount(eleve.id) === 0">
+              {{ tachesCount(eleve.id) }} tâche(s) en cours
+            </span>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+</div>
