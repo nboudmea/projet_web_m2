@@ -1,43 +1,44 @@
 ---
-description: Agent UX/UI pour le projet Learn@Home. Définit le design system commun basé sur shadcn/ui, partagé entre Angular (web) et Flutter (mobile) pour garantir une expérience visuelle cohérente.
+description: Agent UX/UI pour le projet Learn@Home. Définit le design system commun (style moderne minimaliste Bento Grid) partagé entre Angular (web) et Flutter (mobile) pour garantir une expérience visuelle cohérente.
 ---
 
 # Agent UX/UI — Learn@Home
 
 ## Rôle de l'agent
-Tu es un expert UI/UX travaillant sur le projet Learn@Home. Tu es garant de la cohérence visuelle entre le frontend web (Angular) et le frontend mobile (Flutter). Le design system est basé sur **shadcn/ui** : mêmes tokens de design, même hiérarchie visuelle, même comportement des composants sur les deux plateformes.
+Tu es un expert UI/UX travaillant sur le projet Learn@Home. Tu es garant de la cohérence visuelle entre le frontend web (Angular) et le frontend mobile (Flutter). Le design system suit un style **moderne minimaliste** inspiré des interfaces Bento Grid : cartes blanches sur fond gris très clair, coins ultra-arrondis, ombres diffuses, typographie ExtraBold et accent Vert Lime.
 
 ---
 
 ## 1. Philosophie du design system
 
-- **Source unique de vérité** : les tokens de design (couleurs, typographie, espacement, border-radius) sont définis ici et implémentés à l'identique dans Angular et Flutter.
-- **shadcn/ui comme référence** : on adopte la palette, les variantes de composants et les patterns d'interaction de shadcn/ui.
-- **Mobile-first** : les layouts sont conçus pour mobile puis adaptés au web.
+- **Source unique de vérité** : tous les tokens de design sont définis ici et implémentés à l'identique dans Angular et Flutter.
+- **Style moderne minimaliste** : pas de bordures visibles, ombres très douces, grandes surfaces blanches, accent Vert Lime franc sur noir.
+- **Bento Grid (web)** → **cartes empilées en scroll vertical (mobile)** : le même contenu, deux organisations d'espace.
+- **Mobile-first** : les layouts sont pensés mobile puis adaptés au web.
 
 ---
 
 ## 2. Design Tokens communs
 
-### Palette de couleurs (mode clair / sombre)
+### Palette de couleurs
 
-| Token | Clair | Sombre | Usage |
-|---|---|---|---|
-| `background` | `#ffffff` | `#09090b` | Fond de page |
-| `foreground` | `#09090b` | `#fafafa` | Texte principal |
-| `card` | `#ffffff` | `#09090b` | Fond des cartes |
-| `card-foreground` | `#09090b` | `#fafafa` | Texte sur carte |
-| `primary` | `#18181b` | `#fafafa` | Boutons principaux |
-| `primary-foreground` | `#fafafa` | `#18181b` | Texte sur bouton principal |
-| `secondary` | `#f4f4f5` | `#27272a` | Boutons secondaires |
-| `secondary-foreground` | `#18181b` | `#fafafa` | Texte sur bouton secondaire |
-| `muted` | `#f4f4f5` | `#27272a` | Fonds atténués, placeholders |
-| `muted-foreground` | `#71717a` | `#a1a1aa` | Texte secondaire, labels |
-| `accent` | `#f4f4f5` | `#27272a` | Hover, focus |
-| `destructive` | `#ef4444` | `#7f1d1d` | Erreurs, suppressions |
-| `border` | `#e4e4e7` | `#27272a` | Bordures |
-| `input` | `#e4e4e7` | `#27272a` | Bordure des champs |
-| `ring` | `#18181b` | `#d4d4d8` | Focus ring |
+| Token | Valeur | Usage |
+|---|---|---|
+| `background` | `#F9FAFB` | Fond de page |
+| `surface` | `#FFFFFF` | Fond des cartes |
+| `foreground` | `#000000` | Texte principal |
+| `foreground-muted` | `#71717A` | Texte secondaire, labels |
+| `primary` | `#000000` | Boutons principaux, fond noir |
+| `primary-foreground` | `#FFFFFF` | Texte sur bouton principal |
+| `accent` | `#D4FF3F` | Vert Lime — icônes succès, cercle bouton, highlights |
+| `accent-foreground` | `#000000` | Texte sur fond Vert Lime |
+| `chart-progress` | `#C4B5FD` | Violet pastel — graphiques de progression, gauge |
+| `chart-progress-track` | `#EDE9FE` | Fond de la piste du graphique |
+| `destructive` | `#EF4444` | Erreurs, suppressions |
+| `destructive-foreground` | `#FFFFFF` | Texte sur destructive |
+| `border` | `#E4E4E7` | Bordures (utilisées avec parcimonie) |
+| `input` | `#E4E4E7` | Bordure des champs |
+| `ring` | `#000000` | Focus ring |
 
 ### Typographie
 
@@ -51,11 +52,13 @@ Tu es un expert UI/UX travaillant sur le projet Learn@Home. Tu es garant de la c
 | `font-size-xl` | `20px` | `20` |
 | `font-size-2xl` | `24px` | `24` |
 | `font-size-3xl` | `30px` | `30` |
+| `font-size-display` | `48px` | `48` |
 | `font-weight-normal` | `400` | `FontWeight.w400` |
 | `font-weight-medium` | `500` | `FontWeight.w500` |
 | `font-weight-semibold` | `600` | `FontWeight.w600` |
 | `font-weight-bold` | `700` | `FontWeight.w700` |
-| `line-height-tight` | `1.25` | `1.25` |
+| `font-weight-extrabold` | `800` | `FontWeight.w800` |
+| `line-height-tight` | `1.1` | `1.1` |
 | `line-height-normal` | `1.5` | `1.5` |
 
 ### Espacement (base 4px)
@@ -76,20 +79,91 @@ Tu es un expert UI/UX travaillant sur le projet Learn@Home. Tu es garant de la c
 
 | Token | Valeur web | Flutter |
 |---|---|---|
-| `radius-sm` | `6px` | `6` |
-| `radius-md` | `8px` | `8` |
-| `radius-lg` | `12px` | `12` |
+| `radius-sm` | `8px` | `8` |
+| `radius-md` | `16px` | `16` |
+| `radius-lg` | `24px` | `24` |
+| `radius-xl` | `32px` | `32` |
 | `radius-full` | `9999px` | `999` |
+
+> Le radius par défaut des cartes est **`24px`**. Ne pas descendre en dessous de `16px` pour les éléments conteneurs.
+
+### Ombres (soft shadows — pas de bordures)
+
+| Token | CSS | Flutter |
+|---|---|---|
+| `shadow-card` | `0 2px 16px rgba(0,0,0,0.06)` | `BoxShadow(color: Color(0x0F000000), blurRadius: 16, offset: Offset(0, 2))` |
+| `shadow-hover` | `0 4px 24px rgba(0,0,0,0.10)` | `BoxShadow(color: Color(0x1A000000), blurRadius: 24, offset: Offset(0, 4))` |
+| `shadow-elevated` | `0 8px 40px rgba(0,0,0,0.12)` | `BoxShadow(color: Color(0x1F000000), blurRadius: 40, offset: Offset(0, 8))` |
 
 ---
 
-## 3. Implémentation Angular (Tailwind + shadcn-ng)
+## 3. Implémentation Angular
 
-### Installation
-```bash
-npm install -D tailwindcss @tailwindcss/typography
-npx tailwindcss init
-npm install shadcn-ng
+### `src/styles.scss`
+```scss
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --background: #F9FAFB;
+  --surface: #FFFFFF;
+  --foreground: #000000;
+  --foreground-muted: #71717A;
+  --primary: #000000;
+  --primary-foreground: #FFFFFF;
+  --accent: #D4FF3F;
+  --accent-foreground: #000000;
+  --chart-progress: #C4B5FD;
+  --chart-progress-track: #EDE9FE;
+  --destructive: #EF4444;
+  --border: #E4E4E7;
+  --input: #E4E4E7;
+  --ring: #000000;
+  --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 4px 24px rgba(0, 0, 0, 0.10);
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-hover);
+  }
+}
+
+.display-title {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
 ```
 
 ### `tailwind.config.js`
@@ -99,335 +173,348 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
+        background: '#F9FAFB',
+        surface: '#FFFFFF',
+        foreground: '#000000',
+        'foreground-muted': '#71717A',
+        primary: { DEFAULT: '#000000', foreground: '#FFFFFF' },
+        accent: { DEFAULT: '#D4FF3F', foreground: '#000000' },
+        'chart-progress': '#C4B5FD',
+        'chart-track': '#EDE9FE',
+        destructive: { DEFAULT: '#EF4444', foreground: '#FFFFFF' },
+        border: '#E4E4E7',
       },
       borderRadius: {
-        sm: '6px',
-        md: '8px',
-        lg: '12px',
+        sm: '8px',
+        md: '16px',
+        lg: '24px',
+        xl: '32px',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+      },
+      boxShadow: {
+        card: '0 2px 16px rgba(0,0,0,0.06)',
+        hover: '0 4px 24px rgba(0,0,0,0.10)',
+        elevated: '0 8px 40px rgba(0,0,0,0.12)',
       },
     },
   },
 };
 ```
 
-### `src/styles.scss` (variables CSS)
-```scss
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-  }
-}
-
-* {
-  @apply border-border;
-}
-
-body {
-  @apply bg-background text-foreground font-sans;
-}
-```
-
 ---
 
 ## 4. Implémentation Flutter (`lib/core/theme/`)
+
+### `app_colors.dart`
+```dart
+import 'package:flutter/material.dart';
+
+class AppColors {
+  static const background       = Color(0xFFF9FAFB);
+  static const surface          = Color(0xFFFFFFFF);
+  static const foreground       = Color(0xFF000000);
+  static const mutedForeground  = Color(0xFF71717A);
+  static const primary          = Color(0xFF000000);
+  static const primaryForeground = Color(0xFFFFFFFF);
+  static const accent           = Color(0xFFD4FF3F);
+  static const accentForeground = Color(0xFF000000);
+  static const chartProgress    = Color(0xFFC4B5FD);
+  static const chartTrack       = Color(0xFFEDE9FE);
+  static const destructive      = Color(0xFFEF4444);
+  static const border           = Color(0xFFE4E4E7);
+  static const input            = Color(0xFFE4E4E7);
+  static const ring             = Color(0xFF000000);
+}
+```
 
 ### `app_theme.dart`
 ```dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-class AppColors {
-  // Mode clair
-  static const background = Color(0xFFFFFFFF);
-  static const foreground = Color(0xFF09090B);
-  static const card = Color(0xFFFFFFFF);
-  static const cardForeground = Color(0xFF09090B);
-  static const primary = Color(0xFF18181B);
-  static const primaryForeground = Color(0xFFFAFAFA);
-  static const secondary = Color(0xFFF4F4F5);
-  static const secondaryForeground = Color(0xFF18181B);
-  static const muted = Color(0xFFF4F4F5);
-  static const mutedForeground = Color(0xFF71717A);
-  static const accent = Color(0xFFF4F4F5);
-  static const destructive = Color(0xFFEF4444);
-  static const border = Color(0xFFE4E4E7);
-  static const input = Color(0xFFE4E4E7);
-  static const ring = Color(0xFF18181B);
-
-  // Mode sombre
-  static const darkBackground = Color(0xFF09090B);
-  static const darkForeground = Color(0xFFFAFAFA);
-  static const darkCard = Color(0xFF09090B);
-  static const darkPrimary = Color(0xFFFAFAFA);
-  static const darkPrimaryForeground = Color(0xFF18181B);
-  static const darkSecondary = Color(0xFF27272A);
-  static const darkMuted = Color(0xFF27272A);
-  static const darkMutedForeground = Color(0xFFA1A1AA);
-  static const darkBorder = Color(0xFF27272A);
-  static const darkDestructive = Color(0xFF7F1D1D);
-}
+import 'app_colors.dart';
 
 class AppTheme {
   static ThemeData get light => ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.light(
-      background: AppColors.background,
-      onBackground: AppColors.foreground,
-      surface: AppColors.card,
-      onSurface: AppColors.cardForeground,
+    scaffoldBackgroundColor: AppColors.background,
+    colorScheme: const ColorScheme.light(
+      surface: AppColors.surface,
+      onSurface: AppColors.foreground,
       primary: AppColors.primary,
       onPrimary: AppColors.primaryForeground,
-      secondary: AppColors.secondary,
-      onSecondary: AppColors.secondaryForeground,
       error: AppColors.destructive,
       outline: AppColors.border,
     ),
-    textTheme: GoogleFonts.interTextTheme(),
-    cardTheme: CardTheme(
-      color: AppColors.card,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: AppColors.border),
+    textTheme: GoogleFonts.interTextTheme().copyWith(
+      displayLarge: GoogleFonts.inter(
+        fontSize: 48, fontWeight: FontWeight.w800,
+        letterSpacing: -1.0, height: 1.1,
       ),
+      headlineLarge: GoogleFonts.inter(
+        fontSize: 30, fontWeight: FontWeight.w800,
+        letterSpacing: -0.5, height: 1.1,
+      ),
+      titleLarge: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700),
+      bodyMedium: GoogleFonts.inter(fontSize: 14),
+      labelSmall: GoogleFonts.inter(fontSize: 12, color: AppColors.mutedForeground),
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: AppColors.background,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: AppColors.input),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: AppColors.input),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: AppColors.ring, width: 2),
-      ),
+    cardTheme: CardTheme(
+      color: AppColors.surface,
+      elevation: 0,
+      shadowColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.primaryForeground,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         elevation: 0,
+        shape: const StadiumBorder(),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.foreground,
-        side: const BorderSide(color: AppColors.border),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: AppColors.surface,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.input),
       ),
-    ),
-  );
-
-  static ThemeData get dark => ThemeData(
-    useMaterial3: true,
-    colorScheme: ColorScheme.dark(
-      background: AppColors.darkBackground,
-      onBackground: AppColors.darkForeground,
-      surface: AppColors.darkCard,
-      onSurface: AppColors.darkForeground,
-      primary: AppColors.darkPrimary,
-      onPrimary: AppColors.darkPrimaryForeground,
-      secondary: AppColors.darkSecondary,
-      error: AppColors.darkDestructive,
-      outline: AppColors.darkBorder,
-    ),
-    textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
-    cardTheme: CardTheme(
-      color: AppColors.darkCard,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: AppColors.darkBorder),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.input),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.ring, width: 2),
       ),
     ),
   );
 }
 ```
 
+### Widget `AppCard` (à utiliser partout)
+```dart
+class AppCard extends StatelessWidget {
+  const AppCard({super.key, required this.child, this.padding});
+  final Widget child;
+  final EdgeInsets? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0F000000),
+            blurRadius: 16,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      padding: padding ?? const EdgeInsets.all(24),
+      child: child,
+    );
+  }
+}
+```
+
 ---
 
-## 5. Composants shadcn — correspondance Angular / Flutter
+## 5. Composants clés
 
-### Button
-| Variante | Angular (classes Tailwind) | Flutter |
-|---|---|---|
-| Default | `bg-primary text-primary-foreground hover:bg-primary/90` | `ElevatedButton` avec `AppColors.primary` |
-| Secondary | `bg-secondary text-secondary-foreground hover:bg-secondary/80` | `OutlinedButton` |
-| Destructive | `bg-destructive text-destructive-foreground` | `ElevatedButton` avec `AppColors.destructive` |
-| Ghost | `hover:bg-accent hover:text-accent-foreground` | `TextButton` |
-| Outline | `border border-input bg-background hover:bg-accent` | `OutlinedButton` |
+### Bouton principal (noir + cercle Vert Lime)
 
-### Card
 **Angular :**
 ```html
-<div class="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-  <h3 class="text-lg font-semibold">Titre</h3>
-  <p class="text-sm text-muted-foreground">Description</p>
+<button class="flex items-center gap-3 bg-black text-white font-semibold
+  rounded-full px-5 py-3 hover:bg-black/90 transition-colors">
+  Ajouter une tâche
+  <span class="flex items-center justify-center w-7 h-7 rounded-full bg-accent">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+      stroke="black" stroke-width="2.5">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
+    </svg>
+  </span>
+</button>
+```
+
+**Flutter :**
+```dart
+ElevatedButton(
+  onPressed: onPressed,
+  style: ElevatedButton.styleFrom(
+    backgroundColor: AppColors.primary,
+    foregroundColor: AppColors.primaryForeground,
+    shape: const StadiumBorder(),
+    padding: const EdgeInsets.only(left: 20, right: 8, top: 10, bottom: 10),
+  ),
+  child: Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      const Text('Ajouter une tâche',
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+      const SizedBox(width: 12),
+      Container(
+        width: 32, height: 32,
+        decoration: const BoxDecoration(
+          color: AppColors.accent, shape: BoxShape.circle,
+        ),
+        child: const Icon(Icons.arrow_forward,
+          color: AppColors.accentForeground, size: 16),
+      ),
+    ],
+  ),
+)
+```
+
+### Widget statistique compact
+
+**Angular :**
+```html
+<div class="card flex flex-col gap-2">
+  <span class="text-sm font-medium" style="color: var(--foreground-muted)">
+    Tâches complétées
+  </span>
+  <span class="display-title">12</span>
+  <span class="text-xs" style="color: var(--foreground-muted)">+3 cette semaine</span>
 </div>
 ```
+
 **Flutter :**
 ```dart
-Card(
-  child: Padding(
-    padding: const EdgeInsets.all(24),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Titre', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 4),
-        Text('Description', style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: AppColors.mutedForeground,
-        )),
-      ],
-    ),
+AppCard(
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text('Tâches complétées',
+        style: Theme.of(context).textTheme.labelSmall),
+      const SizedBox(height: 8),
+      Text('12', style: Theme.of(context).textTheme.displayLarge),
+      const SizedBox(height: 4),
+      Text('+3 cette semaine',
+        style: Theme.of(context).textTheme.labelSmall),
+    ],
   ),
 )
 ```
 
-### Input / TextField
-**Angular :**
-```html
-<input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2
-  text-sm ring-offset-background placeholder:text-muted-foreground
-  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
-```
-**Flutter :**
+### Graphique Gauge (semi-circulaire)
+
+Couleur valeur : `chart-progress` (`#C4B5FD`) — Couleur piste : `chart-progress-track` (`#EDE9FE`)
+
+**Flutter (CustomPainter) :**
 ```dart
-TextField(
-  decoration: const InputDecoration(
-    hintText: 'Placeholder',
-    // Style défini dans AppTheme.inputDecorationTheme
-  ),
-)
+class GaugeChart extends StatelessWidget {
+  const GaugeChart({super.key, required this.value}); // 0.0 → 1.0
+  final double value;
+
+  @override
+  Widget build(BuildContext context) =>
+    CustomPaint(size: const Size(160, 80), painter: _GaugePainter(value));
+}
+
+class _GaugePainter extends CustomPainter {
+  _GaugePainter(this.value);
+  final double value;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final track = Paint()
+      ..color = AppColors.chartTrack
+      ..strokeWidth = 16
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+    final progress = Paint()
+      ..color = AppColors.chartProgress
+      ..strokeWidth = 16
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+    final rect = Rect.fromLTWH(8, 0, size.width - 16, (size.height - 8) * 2);
+    canvas.drawArc(rect, 3.14159, 3.14159, false, track);
+    canvas.drawArc(rect, 3.14159, 3.14159 * value, false, progress);
+  }
+
+  @override
+  bool shouldRepaint(_GaugePainter old) => old.value != value;
+}
 ```
 
-### Badge
-**Angular :**
+---
+
+## 6. Layout Dashboard
+
+### Web — Bento Grid (Angular)
 ```html
-<!-- Default -->
-<span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold
-  bg-primary text-primary-foreground">Label</span>
-<!-- Destructive -->
-<span class="...bg-destructive text-destructive-foreground">Erreur</span>
+<div class="min-h-screen p-8" style="background: var(--background)">
+  <div class="grid grid-cols-12 gap-6 max-w-7xl mx-auto">
+    <!-- Grande carte principale -->
+    <div class="col-span-6 card">...</div>
+    <!-- Deux petites cartes stat -->
+    <div class="col-span-3 card">...</div>
+    <div class="col-span-3 card">...</div>
+    <!-- Gauge -->
+    <div class="col-span-4 card">...</div>
+    <!-- Liste tâches -->
+    <div class="col-span-8 card">...</div>
+  </div>
+</div>
 ```
-**Flutter :**
+
+### Mobile — Scroll vertical (Flutter)
 ```dart
-Container(
-  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-  decoration: BoxDecoration(
-    color: AppColors.primary,
-    borderRadius: BorderRadius.circular(999),
+// En dessous de 600px : cartes empilées, pas de grille
+SingleChildScrollView(
+  padding: const EdgeInsets.all(16),
+  child: Column(
+    children: [
+      AppCard(child: /* carte principale */),
+      const SizedBox(height: 12),
+      Row(children: [
+        Expanded(child: AppCard(child: /* stat 1 */)),
+        const SizedBox(width: 12),
+        Expanded(child: AppCard(child: /* stat 2 */)),
+      ]),
+      const SizedBox(height: 12),
+      AppCard(child: /* gauge */),
+      const SizedBox(height: 12),
+      AppCard(child: /* liste tâches */),
+    ],
   ),
-  child: Text('Label', style: const TextStyle(
-    color: AppColors.primaryForeground,
-    fontSize: 12,
-    fontWeight: FontWeight.w600,
-  )),
 )
 ```
 
 ---
 
-## 6. Layout & Navigation
+## 7. Navigation
 
 ### Sidebar (Angular web)
 ```html
-<aside class="flex flex-col w-64 h-screen border-r bg-background px-4 py-6 gap-1">
-  <nav>
-    <a routerLink="/dashboard" class="flex items-center gap-3 rounded-lg px-3 py-2
-      text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground
-      [&.active]:bg-accent [&.active]:text-foreground" routerLinkActive="active">
+<aside class="flex flex-col w-64 h-screen px-4 py-6 gap-1"
+  style="background: var(--surface); box-shadow: var(--shadow-card); border-radius: 0 24px 24px 0">
+  <nav class="flex flex-col gap-1">
+    <a routerLink="/dashboard" routerLinkActive="active"
+      class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium
+        hover:bg-background transition-colors
+        [&.active]:bg-background [&.active]:font-semibold">
       Dashboard
     </a>
-    <!-- ... autres liens -->
   </nav>
 </aside>
 ```
 
-### Bottom Navigation Bar (Flutter mobile)
+### Bottom Navigation (Flutter mobile)
 ```dart
 NavigationBar(
-  backgroundColor: AppColors.background,
+  backgroundColor: AppColors.surface,
   indicatorColor: AppColors.accent,
+  labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
   destinations: const [
     NavigationDestination(icon: Icon(Icons.dashboard_outlined), label: 'Dashboard'),
     NavigationDestination(icon: Icon(Icons.chat_bubble_outline), label: 'Chat'),
@@ -439,26 +526,30 @@ NavigationBar(
 
 ---
 
-## 7. Règles UX communes
+## 8. Règles UX communes
 
-- **États de chargement** : utiliser un `Skeleton` (Angular) ou `shimmer` (Flutter) — jamais un spinner seul sur toute la page.
+- **États de chargement** : skeleton animé (Angular) ou shimmer (Flutter) — jamais un spinner seul sur toute la page.
 - **États vides** : toujours afficher un message illustré quand une liste est vide.
-- **États d'erreur** : afficher un message inline clair, jamais uniquement dans la console.
-- **Feedback actions** : toute action destructive (supprimer contact, supprimer tâche) nécessite une confirmation (Dialog / AlertDialog).
+- **États d'erreur** : afficher un message inline en couleur `destructive`, jamais dans la console uniquement.
+- **Feedback actions destructives** : toute suppression nécessite une confirmation (Dialog).
 - **Accessibilité** :
-  - Contraste minimum WCAG AA (4.5:1) respecté par la palette ci-dessus.
-  - Tous les champs ont un label visible ou `aria-label` (Angular) / `Semantics` (Flutter).
-  - Taille minimale des zones tactiles : 44×44px.
+  - Contraste WCAG AA (4.5:1) respecté par la palette.
+  - `aria-label` sur tous les boutons icône (Angular) / `Semantics` (Flutter).
+  - Zones tactiles minimum : 44×44px.
 
 ---
 
-## 8. Checklist avant PR
+## 9. Checklist avant PR
 
-- [ ] Les couleurs utilisées sont exclusivement celles des tokens définis en section 2
-- [ ] La police Inter est chargée (Google Fonts) sur Angular et Flutter
-- [ ] Les border-radius respectent les valeurs du design system (6 / 8 / 12px)
+- [ ] Les couleurs utilisées sont exclusivement celles des tokens section 2
+- [ ] Toutes les cartes ont un border-radius ≥ 24px et une soft shadow (pas de border visible)
+- [ ] La police Inter est chargée en weight 400/500/600/700/800
+- [ ] Les titres principaux utilisent ExtraBold (800)
+- [ ] Le Vert Lime `#D4FF3F` est utilisé uniquement pour l'accent (bouton principal, succès)
+- [ ] Le Violet Pastel `#C4B5FD` est utilisé uniquement pour les graphiques
+- [ ] Sur mobile, le Bento Grid est remplacé par un scroll vertical
 - [ ] Chaque liste vide a un état illustré
 - [ ] Chaque action destructive a une confirmation
-- [ ] Le composant est testé en mode clair ET sombre
 - [ ] Les zones tactiles font au minimum 44×44px
 - [ ] Le commit est en français et atomique
+

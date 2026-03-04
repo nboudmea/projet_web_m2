@@ -1,0 +1,154 @@
+<div class="page">
+
+  <header class="page-header">
+    <div>
+      <h1>Tâches</h1>
+      <p class="subtitle">Assignez et gérez les tâches de vos élèves</p>
+    </div>
+  </header>
+
+  <!-- Filtre par élève -->
+  @if (eleves().length > 0) {
+    <div class="eleve-filter">
+      <button
+        class="filter-chip"
+        [class.filter-chip--active]="selectedEleveId() === null"
+        (click)="selectEleve(null)">
+        <span class="chip-icon">👥</span>
+        Tous les élèves
+      </button>
+      @for (eleve of eleves(); track eleve.id) {
+        <button
+          class="filter-chip"
+          [class.filter-chip--active]="selectedEleveId() === eleve.id"
+          (click)="selectEleve(eleve.id)">
+          <span class="chip-avatar">{{ nomEleve(eleve).charAt(0).toUpperCase() }}</span>
+          {{ nomEleve(eleve) }}
+        </button>
+      }
+    </div>
+  }
+
+  <!-- Formulaire d'assignation -->
+  <section class="form-card">
+    <h2 class="form-title">Assigner une nouvelle tâche</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid" novalidate>
+
+      <!-- Sélection de l'élève -->
+      <div class="field field--full">
+        <label class="field-label" for="assigneeId">Élève *</label>
+        @if (eleves().length === 0) {
+          <p class="field-empty">Aucun élève ne vous est encore assigné.</p>
+        } @else {
+          <select id="assigneeId" formControlName="assigneeId" class="field-select"
+            [class.error]="submitted() && form.controls.assigneeId.invalid">
+            <option value="">— Choisir un élève —</option>
+            @for (eleve of eleves(); track eleve.id) {
+              <option [value]="eleve.id">{{ nomEleve(eleve) }}</option>
+            }
+          </select>
+          @if (submitted() && form.controls.assigneeId.invalid) {
+            <span class="field-error">Veuillez sélectionner un élève.</span>
+          }
+        }
+      </div>
+
+      <!-- Titre -->
+      <div class="field field--full">
+        <label class="field-label" for="titre">Titre *</label>
+        <input id="titre" type="text" formControlName="titre" class="field-input"
+          placeholder="Ex: Exercices de mathématiques p.42"
+          [class.error]="submitted() && form.controls.titre.invalid" />
+        @if (submitted() && form.controls.titre.invalid) {
+          <span class="field-error">Le titre est obligatoire.</span>
+        }
+      </div>
+
+      <!-- Description -->
+      <div class="field field--full">
+        <label class="field-label" for="description">Description <span class="optional">(optionnel)</span></label>
+        <textarea id="description" formControlName="description" class="field-textarea" rows="2"
+          placeholder="Précisions sur la tâche…"></textarea>
+      </div>
+
+      <!-- Date d'échéance -->
+      <div class="field">
+        <label class="field-label" for="dateEcheance">Date d'échéance <span class="optional">(optionnel)</span></label>
+        <input id="dateEcheance" type="date" formControlName="dateEcheance" class="field-input" />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-submit" [disabled]="submitting()">
+          @if (submitting()) { Assignation… } @else { Assigner la tâche }
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+  <!-- Liste des tâches -->
+  @if (tasksFiltrees.length > 0) {
+    <section class="section">
+      <h2 class="section-title">
+        @if (selectedEleveId()) {
+          Tâches de {{ nomEleve(elevesMap.get(selectedEleveId()!)!) }}
+        } @else {
+          Toutes les tâches assignées
+        }
+      </h2>
+
+      @for (groupe of groupes; track groupe.eleve.id) {
+        <div class="groupe">
+          @if (selectedEleveId() === null) {
+            <div class="groupe-header">
+              <div class="eleve-avatar">{{ nomEleve(groupe.eleve).charAt(0).toUpperCase() }}</div>
+              <span class="groupe-nom">{{ nomEleve(groupe.eleve) }}</span>
+              <span class="groupe-count">{{ groupe.tasks.length }}</span>
+            </div>
+          }
+
+          <ul class="task-list" [class.task-list--indented]="selectedEleveId() === null">
+            @for (task of groupe.tasks; track task.id) {
+              <li class="task-card" [class.task-card--done]="task.terminee">
+                <button class="checkbox" [class.checkbox--checked]="task.terminee"
+                  (click)="toggle(task)" [attr.aria-label]="task.terminee ? 'Rouvrir' : 'Terminer'">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </button>
+                <div class="task-body">
+                  <p class="task-titre">{{ task.titre }}</p>
+                  @if (task.description) {
+                    <p class="task-desc">{{ task.description }}</p>
+                  }
+                </div>
+                @if (task.dateEcheance) {
+                  <span class="task-badge">📅 {{ task.dateEcheance | date:'d MMM yyyy' }}</span>
+                }
+                <button class="btn-delete" (click)="delete(task.id)" aria-label="Supprimer">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                    <path d="M10 11v6"/><path d="M14 11v6"/>
+                    <path d="M9 6V4h6v2"/>
+                  </svg>
+                </button>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </section>
+  } @else {
+    <div class="empty-state">
+      <span class="empty-icon">📋</span>
+      @if (selectedEleveId()) {
+        <p>Aucune tâche assignée à cet élève.</p>
+      } @else {
+        <p>Aucune tâche assignée pour l'instant.</p>
+      }
+    </div>
+  }
+
+</div>

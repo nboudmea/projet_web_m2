@@ -1,1 +1,42 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================
+   Design tokens — Learn@Home
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --background:          #F9FAFB;
+  --surface:             #FFFFFF;
+  --foreground:          #111111;
+  --foreground-muted:    #6B7280;
+
+  --primary:             #111111;
+  --primary-foreground:  #FFFFFF;
+
+  --accent:              #D4FF3F;
+  --accent-foreground:   #111111;
+
+  --destructive:         #EF4444;
+
+  --input:               #E5E7EB;
+  --ring:                #111111;
+
+  --radius-sm:           8px;
+  --radius-md:           12px;
+  --radius-lg:           24px;
+
+  --shadow-card: 0 4px 32px rgba(0, 0, 0, .10), 0 1px 4px rgba(0, 0, 0, .06);
+  --shadow-soft: 0 2px 16px rgba(0, 0, 0, .06);
+}
+
+/* Reset minimal */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+button { font-family: 'Inter', sans-serif; }

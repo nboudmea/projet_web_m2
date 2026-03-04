@@ -1,0 +1,70 @@
+<div class="page">
+
+  <header class="page-header">
+    <div>
+      <h1>Mes tâches</h1>
+      <p class="subtitle">Tâches assignées par ton bénévole</p>
+    </div>
+    <div class="counters">
+      <span class="counter counter--pending">{{ enCours.length }} à faire</span>
+      <span class="counter counter--done">{{ terminees.length }} terminée(s)</span>
+    </div>
+  </header>
+
+  <!-- Tâches à faire -->
+  <section class="section">
+    <h2 class="section-title">À faire</h2>
+
+    @if (enCours.length === 0) {
+      <div class="empty-state">
+        <span class="empty-icon">✅</span>
+        <p>Toutes tes tâches sont complétées !</p>
+      </div>
+    } @else {
+      <ul class="task-list">
+        @for (task of enCours; track task.id) {
+          <li class="task-card" (click)="toggle(task)">
+            <button class="checkbox" aria-label="Marquer comme terminée">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </button>
+            <div class="task-body">
+              <p class="task-titre">{{ task.titre }}</p>
+              @if (task.description) {
+                <p class="task-desc">{{ task.description }}</p>
+              }
+            </div>
+            @if (task.dateEcheance) {
+              <span class="task-badge">
+                📅 {{ task.dateEcheance | date:'d MMM yyyy' }}
+              </span>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  <!-- Tâches terminées -->
+  @if (terminees.length > 0) {
+    <section class="section">
+      <h2 class="section-title section-title--muted">Terminées ({{ terminees.length }})</h2>
+      <ul class="task-list">
+        @for (task of terminees; track task.id) {
+          <li class="task-card task-card--done" (click)="toggle(task)">
+            <button class="checkbox checkbox--checked" aria-label="Marquer comme non terminée">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </button>
+            <div class="task-body">
+              <p class="task-titre">{{ task.titre }}</p>
+            </div>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+</div>

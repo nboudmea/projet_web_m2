@@ -1,0 +1,111 @@
+<div class="auth-page">
+
+  <!-- Panneau gauche : branding -->
+  <aside class="auth-panel">
+    <a class="panel-logo" routerLink="/">Learn<span>@</span>Home</a>
+
+    <div class="panel-body">
+      <h2>Rejoins<br><span class="highlight">1 800+</span><br>bénévoles.</h2>
+      <p>Des milliers d'élèves attendent un soutien. En t'inscrivant, tu fais partie de la solution.</p>
+    </div>
+
+    <div class="panel-stats">
+      <div class="panel-stat">
+        <span class="panel-stat-value">2 400+</span>
+        <span class="panel-stat-label">Élèves aidés</span>
+      </div>
+      <div class="panel-stat">
+        <span class="panel-stat-value">96%</span>
+        <span class="panel-stat-label">de satisfaction</span>
+      </div>
+      <div class="panel-stat">
+        <span class="panel-stat-value">100%</span>
+        <span class="panel-stat-label">gratuit</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Panneau droit : formulaire -->
+  <div class="auth-form-side">
+    <div class="auth-card">
+
+      <div class="auth-header">
+        <a class="back-link" routerLink="/">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          Accueil
+        </a>
+        <h1>Créer un compte</h1>
+        <p>Rejoins Learn&#64;Home</p>
+      </div>
+
+    @if (errorMessage()) {
+      <div class="error-banner">{{ errorMessage() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email"
+          placeholder="ton@email.com"
+          [class.invalid]="email?.invalid && email?.touched" />
+        @if (email?.touched && email?.hasError('required')) {
+          <span class="field-error">L'email est obligatoire.</span>
+        }
+        @if (email?.touched && email?.hasError('email')) {
+          <span class="field-error">Format d'email invalide.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="password">Mot de passe</label>
+        <input id="password" type="password" formControlName="password"
+          placeholder="••••••••"
+          [class.invalid]="password?.invalid && password?.touched" />
+        @if (password?.touched && password?.hasError('minlength')) {
+          <span class="field-error">Au moins 6 caractères.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="confirmPassword">Confirmer le mot de passe</label>
+        <input id="confirmPassword" type="password" formControlName="confirmPassword"
+          placeholder="••••••••"
+          [class.invalid]="form.hasError('passwordsMismatch') && confirmPassword?.touched" />
+        @if (form.hasError('passwordsMismatch') && confirmPassword?.touched) {
+          <span class="field-error">Les mots de passe ne correspondent pas.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label>Je suis</label>
+        <div class="role-selector">
+          <label class="role-option">
+            <input type="radio" formControlName="role" value="eleve" />
+            Élève
+          </label>
+          <label class="role-option">
+            <input type="radio" formControlName="role" value="benevole" />
+            Bénévole
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="isLoading()">
+        {{ isLoading() ? 'Création...' : 'Créer mon compte' }}
+        <span class="btn-circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </button>
+
+    </form>
+
+      <div class="auth-footer">
+        <a routerLink="/login" class="btn-forgot">Déjà un compte ? <strong>Se connecter</strong></a>
+      </div>
+
+    </div>
+  </div>
+</div>
