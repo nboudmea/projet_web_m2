@@ -56,4 +56,12 @@ export class TaskService {
   toggleTask(taskId: string, terminee: boolean): Promise<void> {
     return updateDoc(doc(this.firestore, `tasks/${taskId}`), { terminee });
   }
+
+  updateTask(taskId: string, changes: Partial<Omit<Task, 'id'>>): Promise<void> {
+    // Retire les undefined pour ne pas écraser des champs existants avec null
+    const data = Object.fromEntries(
+      Object.entries(changes).filter(([, v]) => v !== undefined)
+    );
+    return updateDoc(doc(this.firestore, `tasks/${taskId}`), data);
+  }
 }

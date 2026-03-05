@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { TimestampToDatePipe } from '../../../../shared/pipes/timestamp-to-date.pipe';
 import { switchMap, of } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth.service';
 import { TaskService } from '../../../../core/services/task.service';
@@ -12,7 +13,7 @@ import { User } from '../../../../core/models/user.model';
 @Component({
   selector: 'app-eleve-accueil',
   standalone: true,
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, TimestampToDatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './eleve-accueil.component.html',
   styleUrl: './eleve-accueil.component.scss',

@@ -13,16 +13,16 @@
 
   <!-- Tâches à faire -->
   <section class="section">
-    <h2 class="section-title">À faire</h2>
+    <h2 class="section-title">Cette semaine</h2>
 
-    @if (enCours.length === 0) {
+    @if (cetteSemaine.length === 0) {
       <div class="empty-state">
         <span class="empty-icon">✅</span>
-        <p>Toutes tes tâches sont complétées !</p>
+        <p>Aucune tâche cette semaine !</p>
       </div>
     } @else {
       <ul class="task-list">
-        @for (task of enCours; track task.id) {
+        @for (task of cetteSemaine; track task.id) {
           <li class="task-card" (click)="toggle(task)">
             <button class="checkbox" aria-label="Marquer comme terminée">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
@@ -37,7 +37,7 @@
             </div>
             @if (task.dateEcheance) {
               <span class="task-badge">
-                📅 {{ task.dateEcheance | date:'d MMM yyyy' }}
+                📅 {{ task.dateEcheance | timestampToDate | date:'d MMM yyyy' }}
               </span>
             }
           </li>
@@ -45,6 +45,33 @@
       </ul>
     }
   </section>
+
+  <!-- Tâches ultérieures -->
+  @if (plusTard.length > 0) {
+    <section class="section">
+      <h2 class="section-title section-title--muted">À faire plus tard ({{ plusTard.length }})</h2>
+      <ul class="task-list">
+        @for (task of plusTard; track task.id) {
+          <li class="task-card" (click)="toggle(task)">
+            <button class="checkbox" aria-label="Marquer comme terminée">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </button>
+            <div class="task-body">
+              <p class="task-titre">{{ task.titre }}</p>
+              @if (task.description) {
+                <p class="task-desc">{{ task.description }}</p>
+              }
+            </div>
+            @if (task.dateEcheance) {
+              <span class="task-badge">📅 {{ task.dateEcheance | timestampToDate | date:'d MMM yyyy' }}</span>
+            }
+          </li>
+        }
+      </ul>
+    </section>
+  }
 
   <!-- Tâches terminées -->
   @if (terminees.length > 0) {

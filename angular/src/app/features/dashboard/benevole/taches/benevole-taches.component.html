@@ -5,6 +5,12 @@
       <h1>Tâches</h1>
       <p class="subtitle">Assignez et gérez les tâches de vos élèves</p>
     </div>
+    <button class="btn-assign" (click)="openCreate()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Assigner une tâche
+    </button>
   </header>
 
   <!-- Filtre par élève -->
@@ -29,76 +35,18 @@
     </div>
   }
 
-  <!-- Formulaire d'assignation -->
-  <section class="form-card">
-    <h2 class="form-title">Assigner une nouvelle tâche</h2>
-
-    <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid" novalidate>
-
-      <!-- Sélection de l'élève -->
-      <div class="field field--full">
-        <label class="field-label" for="assigneeId">Élève *</label>
-        @if (eleves().length === 0) {
-          <p class="field-empty">Aucun élève ne vous est encore assigné.</p>
-        } @else {
-          <select id="assigneeId" formControlName="assigneeId" class="field-select"
-            [class.error]="submitted() && form.controls.assigneeId.invalid">
-            <option value="">— Choisir un élève —</option>
-            @for (eleve of eleves(); track eleve.id) {
-              <option [value]="eleve.id">{{ nomEleve(eleve) }}</option>
-            }
-          </select>
-          @if (submitted() && form.controls.assigneeId.invalid) {
-            <span class="field-error">Veuillez sélectionner un élève.</span>
-          }
-        }
-      </div>
-
-      <!-- Titre -->
-      <div class="field field--full">
-        <label class="field-label" for="titre">Titre *</label>
-        <input id="titre" type="text" formControlName="titre" class="field-input"
-          placeholder="Ex: Exercices de mathématiques p.42"
-          [class.error]="submitted() && form.controls.titre.invalid" />
-        @if (submitted() && form.controls.titre.invalid) {
-          <span class="field-error">Le titre est obligatoire.</span>
-        }
-      </div>
-
-      <!-- Description -->
-      <div class="field field--full">
-        <label class="field-label" for="description">Description <span class="optional">(optionnel)</span></label>
-        <textarea id="description" formControlName="description" class="field-textarea" rows="2"
-          placeholder="Précisions sur la tâche…"></textarea>
-      </div>
-
-      <!-- Date d'échéance -->
-      <div class="field">
-        <label class="field-label" for="dateEcheance">Date d'échéance <span class="optional">(optionnel)</span></label>
-        <input id="dateEcheance" type="date" formControlName="dateEcheance" class="field-input" />
-      </div>
-
-      <div class="form-actions">
-        <button type="submit" class="btn-submit" [disabled]="submitting()">
-          @if (submitting()) { Assignation… } @else { Assigner la tâche }
-        </button>
-      </div>
-
-    </form>
-  </section>
-
-  <!-- Liste des tâches -->
-  @if (tasksFiltrees.length > 0) {
+  <!-- Liste des tâches — Cette semaine -->
+  @if (tachesCetteSemaine.length > 0) {
     <section class="section">
       <h2 class="section-title">
         @if (selectedEleveId()) {
-          Tâches de {{ nomEleve(elevesMap.get(selectedEleveId()!)!) }}
+          Cette semaine — {{ nomEleve(elevesMap.get(selectedEleveId()!)!) }}
         } @else {
-          Toutes les tâches assignées
+          Cette semaine
         }
       </h2>
 
-      @for (groupe of groupes; track groupe.eleve.id) {
+      @for (groupe of groupesCetteSemaine; track groupe.eleve.id) {
         <div class="groupe">
           @if (selectedEleveId() === null) {
             <div class="groupe-header">
@@ -107,10 +55,9 @@
               <span class="groupe-count">{{ groupe.tasks.length }}</span>
             </div>
           }
-
           <ul class="task-list" [class.task-list--indented]="selectedEleveId() === null">
             @for (task of groupe.tasks; track task.id) {
-              <li class="task-card" [class.task-card--done]="task.terminee">
+              <li class="task-card">
                 <button class="checkbox" [class.checkbox--checked]="task.terminee"
                   (click)="toggle(task)" [attr.aria-label]="task.terminee ? 'Rouvrir' : 'Terminer'">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
@@ -124,8 +71,14 @@
                   }
                 </div>
                 @if (task.dateEcheance) {
-                  <span class="task-badge">📅 {{ task.dateEcheance | date:'d MMM yyyy' }}</span>
+                  <span class="task-badge">📅 {{ task.dateEcheance | timestampToDate | date:'d MMM yyyy' }}</span>
                 }
+                <button class="btn-edit" (click)="openEdit(task)" aria-label="Modifier">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
                 <button class="btn-delete" (click)="delete(task.id)" aria-label="Supprimer">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="3 6 5 6 21 6"/>
@@ -140,7 +93,61 @@
         </div>
       }
     </section>
-  } @else {
+  }
+
+  <!-- Liste des tâches — Plus tard -->
+  @if (tachesPlusTard.length > 0) {
+    <section class="section">
+      <h2 class="section-title section-title--muted">À faire plus tard ({{ tachesPlusTard.length }})</h2>
+
+      @for (groupe of groupesPlusTard; track groupe.eleve.id) {
+        <div class="groupe">
+          @if (selectedEleveId() === null) {
+            <div class="groupe-header">
+              <div class="eleve-avatar">{{ nomEleve(groupe.eleve).charAt(0).toUpperCase() }}</div>
+              <span class="groupe-nom">{{ nomEleve(groupe.eleve) }}</span>
+              <span class="groupe-count">{{ groupe.tasks.length }}</span>
+            </div>
+          }
+          <ul class="task-list" [class.task-list--indented]="selectedEleveId() === null">
+            @for (task of groupe.tasks; track task.id) {
+              <li class="task-card">
+                <button class="checkbox" (click)="toggle(task)" aria-label="Terminer">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </button>
+                <div class="task-body">
+                  <p class="task-titre">{{ task.titre }}</p>
+                  @if (task.description) { <p class="task-desc">{{ task.description }}</p> }
+                </div>
+                @if (task.dateEcheance) {
+                  <span class="task-badge">📅 {{ task.dateEcheance | timestampToDate | date:'d MMM yyyy' }}</span>
+                }
+                <button class="btn-edit" (click)="openEdit(task)" aria-label="Modifier">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
+                <button class="btn-delete" (click)="delete(task.id)" aria-label="Supprimer">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                    <path d="M10 11v6"/><path d="M14 11v6"/>
+                    <path d="M9 6V4h6v2"/>
+                  </svg>
+                </button>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Empty state global -->
+  @if (tasksFiltrees.length === 0) {
     <div class="empty-state">
       <span class="empty-icon">📋</span>
       @if (selectedEleveId()) {
@@ -151,4 +158,134 @@
     </div>
   }
 
+  <!-- Terminées -->
+  @if (tachesTerminees.length > 0) {
+    <section class="section">
+      <h2 class="section-title section-title--muted">Terminées ({{ tachesTerminees.length }})</h2>
+      <ul class="task-list">
+        @for (task of tachesTerminees; track task.id) {
+          <li class="task-card task-card--done">
+            <button class="checkbox checkbox--checked" (click)="toggle(task)" aria-label="Rouvrir">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </button>
+            <div class="task-body"><p class="task-titre">{{ task.titre }}</p></div>
+            <button class="btn-delete" (click)="delete(task.id)" aria-label="Supprimer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6"/><path d="M14 11v6"/>
+                <path d="M9 6V4h6v2"/>
+              </svg>
+            </button>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
 </div>
+
+@if (editingTask()) {
+  <div class="modal-overlay" (click)="cancelEdit()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h2 class="modal-title">Modifier la tâche</h2>
+        <button class="modal-close" (click)="cancelEdit()">✕</button>
+      </div>
+
+      <form [formGroup]="editForm" (ngSubmit)="saveEdit()" class="form-grid" novalidate>
+
+        <div class="field field--full">
+          <label class="field-label">Titre *</label>
+          <input type="text" formControlName="titre" class="field-input"
+            [class.error]="editForm.controls.titre.invalid && editForm.controls.titre.touched" />
+        </div>
+
+        <div class="field field--full">
+          <label class="field-label">Description <span class="optional">(optionnel)</span></label>
+          <textarea formControlName="description" class="field-textarea" rows="2"
+            placeholder="Précisions sur la tâche…"></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Date d'échéance <span class="optional">(optionnel)</span></label>
+          <input type="date" formControlName="dateEcheance" class="field-input" />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="cancelEdit()">Annuler</button>
+          <button type="submit" class="btn-submit" [disabled]="saving()">
+            @if (saving()) { Enregistrement… } @else { Enregistrer }
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+}
+
+<!-- Modale de création -->
+@if (creatingTask()) {
+  <div class="modal-overlay" (click)="cancelCreate()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h2 class="modal-title">Assigner une tâche</h2>
+        <button class="modal-close" (click)="cancelCreate()">✕</button>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid" novalidate>
+
+        <div class="field field--full">
+          <label class="field-label" for="assigneeId">Élève *</label>
+          @if (eleves().length === 0) {
+            <p class="field-empty">Aucun élève ne vous est encore assigné.</p>
+          } @else {
+            <select id="assigneeId" formControlName="assigneeId" class="field-select"
+              [class.error]="submitted() && form.controls.assigneeId.invalid">
+              <option value="">— Choisir un élève —</option>
+              @for (eleve of eleves(); track eleve.id) {
+                <option [value]="eleve.id">{{ nomEleve(eleve) }}</option>
+              }
+            </select>
+            @if (submitted() && form.controls.assigneeId.invalid) {
+              <span class="field-error">Veuillez sélectionner un élève.</span>
+            }
+          }
+        </div>
+
+        <div class="field field--full">
+          <label class="field-label" for="titre">Titre *</label>
+          <input id="titre" type="text" formControlName="titre" class="field-input"
+            placeholder="Ex: Exercices de mathématiques p.42"
+            [class.error]="submitted() && form.controls.titre.invalid" />
+          @if (submitted() && form.controls.titre.invalid) {
+            <span class="field-error">Le titre est obligatoire.</span>
+          }
+        </div>
+
+        <div class="field field--full">
+          <label class="field-label" for="description">Description <span class="optional">(optionnel)</span></label>
+          <textarea id="description" formControlName="description" class="field-textarea" rows="2"
+            placeholder="Précisions sur la tâche…"></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="dateEcheance">Date d'échéance <span class="optional">(optionnel)</span></label>
+          <input id="dateEcheance" type="date" formControlName="dateEcheance" class="field-input" />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="cancelCreate()">Annuler</button>
+          <button type="submit" class="btn-submit" [disabled]="submitting()">
+            @if (submitting()) { Assignation… } @else { Assigner la tâche }
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+}
