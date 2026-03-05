@@ -1,0 +1,163 @@
+<div class="page">
+
+  <!-- EN-TÊTE -->
+  <header class="page-header">
+    <div>
+      <h1>Calendrier</h1>
+      <p class="subtitle">Visualisez vos tâches et rendez-vous</p>
+    </div>
+    <button class="btn-today" (click)="goToToday()">Aujourd'hui</button>
+  </header>
+
+  <div class="calendar-layout">
+
+    <!-- GRILLE DU MOIS -->
+    <section class="calendar-card">
+
+      <!-- Navigation mois -->
+      <div class="month-nav">
+        <button class="nav-btn" (click)="prevMonth()" aria-label="Mois précédent">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <span class="month-label">{{ monthLabel() }}</span>
+        <button class="nav-btn" (click)="nextMonth()" aria-label="Mois suivant">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Jours de la semaine -->
+      <div class="weekdays">
+        @for (d of ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim']; track d) {
+          <span class="weekday">{{ d }}</span>
+        }
+      </div>
+
+      <!-- Grille des jours -->
+      <div class="grid">
+        @for (week of weeks(); track $index) {
+          @for (cell of week; track cell.date.toISOString()) {
+            <button
+              class="day-cell"
+              [class.other-month]="!cell.isCurrentMonth"
+              [class.today]="cell.isToday"
+              [class.selected]="isSelected(cell)"
+              [class.has-items]="cell.taskCount > 0 || cell.eventCount > 0"
+              (click)="selectDay(cell)"
+              [attr.aria-label]="cell.date | date:'d MMMM yyyy'"
+            >
+              <span class="day-number">{{ cell.date | date:'d' }}</span>
+              <div class="day-dots">
+                @if (cell.taskCount > 0) {
+                  <span class="dot dot--task" [attr.title]="cell.taskCount + ' tâche(s)'"></span>
+                }
+                @if (cell.eventCount > 0) {
+                  <span class="dot dot--event" [attr.title]="cell.eventCount + ' événement(s)'"></span>
+                }
+              </div>
+            </button>
+          }
+        }
+      </div>
+
+    </section>
+
+    <!-- PANNEAU DÉTAIL DU JOUR -->
+    @if (selectedDate()) {
+      <aside class="detail-panel">
+        <div class="detail-header">
+          <span class="detail-date">{{ selectedDate() | date:'EEEE d MMMM' : '' : 'fr' }}</span>
+        </div>
+
+        <!-- Tâches du jour -->
+        <div class="detail-section">
+          <h3 class="detail-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+            Tâches
+          </h3>
+
+          @if (tasksOfDay.length === 0) {
+            <p class="empty-msg">Aucune tâche ce jour</p>
+          } @else {
+            <ul class="item-list">
+              @for (task of tasksOfDay; track task.id) {
+                <li class="item-card" [class.item-card--done]="task.terminee">
+                  <button
+                    class="checkbox"
+                    [class.checkbox--checked]="task.terminee"
+                    (click)="toggle(task)"
+                    [attr.aria-label]="task.terminee ? 'Rouvrir' : 'Terminer'"
+                  >
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </button>
+                  <div class="item-body">
+                    <p class="item-titre">{{ task.titre }}</p>
+                    @if (task.description) {
+                      <p class="item-desc">{{ task.description }}</p>
+                    }
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+        <!-- Événements du jour -->
+        <div class="detail-section">
+          <h3 class="detail-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            Événements
+          </h3>
+
+          @if (eventsOfDay.length === 0) {
+            <p class="empty-msg">Aucun événement ce jour</p>
+          } @else {
+            <ul class="item-list">
+              @for (evt of eventsOfDay; track evt.id) {
+                <li class="item-card event-card">
+                  <div class="event-time">
+                    {{ evt.debut | timestampToDate | date:'HH:mm' }}
+                    –
+                    {{ evt.fin | timestampToDate | date:'HH:mm' }}
+                  </div>
+                  <div class="item-body">
+                    <p class="item-titre">{{ evt.titre }}</p>
+                    @if (evt.description) {
+                      <p class="item-desc">{{ evt.description }}</p>
+                    }
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+      </aside>
+    } @else {
+      <aside class="detail-panel detail-panel--empty">
+        <p class="select-hint">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".35">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Sélectionnez un jour pour voir les tâches et événements
+        </p>
+      </aside>
+    }
+
+  </div>
+
+</div>

@@ -30,8 +30,9 @@ export const routes: Routes = [
         path: 'eleve',
         loadComponent: () => import('./features/dashboard/eleve/eleve-dashboard.component').then(m => m.EleveDashboardComponent),
         children: [
-          { path: 'accueil', loadComponent: () => import('./features/dashboard/eleve/accueil/eleve-accueil.component').then(m => m.EleveAccueilComponent) },
-          { path: 'taches',  loadComponent: () => import('./features/dashboard/eleve/taches/eleve-taches.component').then(m => m.EleveTachesComponent) },
+          { path: 'accueil',     loadComponent: () => import('./features/dashboard/eleve/accueil/eleve-accueil.component').then(m => m.EleveAccueilComponent) },
+          { path: 'taches',      loadComponent: () => import('./features/dashboard/eleve/taches/eleve-taches.component').then(m => m.EleveTachesComponent) },
+          { path: 'calendrier',  loadComponent: () => import('./features/dashboard/eleve/calendrier/eleve-calendrier.component').then(m => m.EleveCalendrierComponent) },
           { path: '', redirectTo: 'accueil', pathMatch: 'full' },
         ],
       },
@@ -40,8 +41,9 @@ export const routes: Routes = [
         path: 'benevole',
         loadComponent: () => import('./features/dashboard/benevole/benevole-dashboard.component').then(m => m.BenevoleDashboardComponent),
         children: [
-          { path: 'accueil', loadComponent: () => import('./features/dashboard/benevole/accueil/benevole-accueil.component').then(m => m.BenevoleAccueilComponent) },
-          { path: 'taches',  loadComponent: () => import('./features/dashboard/benevole/taches/benevole-taches.component').then(m => m.BenevoleTachesComponent) },
+          { path: 'accueil',     loadComponent: () => import('./features/dashboard/benevole/accueil/benevole-accueil.component').then(m => m.BenevoleAccueilComponent) },
+          { path: 'taches',      loadComponent: () => import('./features/dashboard/benevole/taches/benevole-taches.component').then(m => m.BenevoleTachesComponent) },
+          { path: 'calendrier',  loadComponent: () => import('./features/dashboard/benevole/calendrier/benevole-calendrier.component').then(m => m.BenevoleCalendrierComponent) },
           { path: '', redirectTo: 'accueil', pathMatch: 'full' },
         ],
       },

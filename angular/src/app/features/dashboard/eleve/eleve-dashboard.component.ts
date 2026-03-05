@@ -15,8 +15,9 @@ export class EleveDashboardComponent {
   private router = inject(Router);
 
   readonly navItems = [
-    { label: 'Accueil', path: 'accueil', icon: 'home' },
-    { label: 'Tâches',  path: 'taches',  icon: 'tasks' },
+    { label: 'Accueil',     path: 'accueil',     icon: 'home' },
+    { label: 'Tâches',     path: 'taches',      icon: 'tasks' },
+    { label: 'Calendrier', path: 'calendrier',  icon: 'calendar' },
   ];
 
   logout() {
