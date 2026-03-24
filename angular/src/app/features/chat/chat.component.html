@@ -1,0 +1,75 @@
+<div class="chat-page">
+
+  <!-- Panneau gauche : liste des conversations -->
+  <aside class="chat-sidebar">
+    <div class="sidebar-header">
+      <h1 class="sidebar-title">Messages</h1>
+    </div>
+
+    @if (conversationVMs().length === 0) {
+      <div class="empty-list">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <p>Aucune conversation</p>
+      </div>
+    } @else {
+      <app-conversation-list
+        [conversations]="conversationVMs()"
+        [selectedId]="selectedConversationId()"
+        (conversationSelected)="onConversationSelect($event)"
+      />
+    }
+  </aside>
+
+  <!-- Panneau droit : zone de messages -->
+  <section class="chat-main">
+    @if (selectedConversationId() && selectedOtherUser() && currentUser()) {
+
+      <!-- En-tête de la conversation -->
+      <header class="chat-header">
+        <div class="chat-header-avatar">
+          @if (selectedOtherUser()!.photoUrl) {
+            <img [src]="selectedOtherUser()!.photoUrl" [alt]="selectedOtherUser()!.prenom || selectedOtherUser()!.email" />
+          } @else {
+            <span>{{ (selectedOtherUser()!.prenom || selectedOtherUser()!.email || '?')[0].toUpperCase() }}{{ (selectedOtherUser()!.nom || '')[0]?.toUpperCase() }}</span>
+          }
+        </div>
+        <div class="chat-header-info">
+          <span class="chat-header-name">
+            {{ selectedOtherUser()!.prenom || selectedOtherUser()!.email }} {{ selectedOtherUser()!.nom }}
+          </span>
+          <span class="chat-header-role">
+            {{ selectedOtherUser()!.role === 'benevole' ? 'Bénévole' : 'Élève' }}
+          </span>
+        </div>
+      </header>
+
+      <!-- Liste des messages -->
+      <app-message-list
+        [conversationId]="selectedConversationId()!"
+        [currentUserId]="currentUser()!.id"
+      />
+
+      <!-- Saisie du message -->
+      <app-message-input
+        [conversationId]="selectedConversationId()!"
+        [expediteurId]="currentUser()!.id"
+        [destinataireId]="selectedOtherUser()!.id"
+      />
+
+    } @else {
+
+      <!-- État vide : aucune conversation sélectionnée -->
+      <div class="chat-empty-state">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <p class="empty-title">Sélectionnez une conversation</p>
+        <p class="empty-subtitle">Choisissez un contact dans la liste pour démarrer.</p>
+      </div>
+
+    }
+  </section>
+
+</div>

@@ -18,6 +18,7 @@ export class BenevoleDashboardComponent {
     { label: 'Accueil',     path: 'accueil',     icon: 'home' },
     { label: 'Tâches',     path: 'taches',      icon: 'tasks' },
     { label: 'Calendrier', path: 'calendrier',  icon: 'calendar' },
+    { label: 'Chat',       path: 'chat',        icon: 'chat' },
   ];
 
   logout() {

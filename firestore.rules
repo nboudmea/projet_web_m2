@@ -10,11 +10,43 @@ service cloud.firestore {
       allow write: if request.auth != null && request.auth.uid == userId;
     }
 
-    // Seuls les participants peuvent lire/écrire les messages
-    match /messages/{messageId} {
-      allow read, write: if request.auth != null &&
-        (resource.data.expediteurId == request.auth.uid ||
-         resource.data.destinataireId == request.auth.uid);
+    // Conversations : l'ID est toujours "uid1_uid2" (UIDs triés, alphanumériques).
+    match /conversations/{conversationId} {
+      // get  = lecture d'un doc unique (peut être inexistant → resource est null)
+      //        on valide via l'ID de conversation.
+      allow get: if request.auth != null &&
+        request.auth.uid in conversationId.split('_');
+
+      // list = requête avec where() → resource existe toujours, Firestore peut
+      //        prouver statiquement que participantsIds contient l'uid
+      //        grâce au filtre array-contains utilisé dans la requête.
+      allow list: if request.auth != null &&
+        request.auth.uid in resource.data.participantsIds;
+
+      // Création : vérification via l'ID ET le champ participantsIds
+      allow create: if request.auth != null &&
+        request.auth.uid in conversationId.split('_') &&
+        request.auth.uid in request.resource.data.participantsIds;
+
+      // Mise à jour (lastMessage, lastMessageAt) : être participant
+      allow update: if request.auth != null &&
+        request.auth.uid in conversationId.split('_');
+
+      // Messages d'une conversation (sous-collection).
+      // conversationId est l'ID du parent (constant pour tous les messages),
+      // donc split('_') est évaluable statiquement par Firestore.
+      match /messages/{messageId} {
+        allow read: if request.auth != null &&
+          request.auth.uid in conversationId.split('_');
+
+        allow create: if request.auth != null &&
+          request.auth.uid in conversationId.split('_') &&
+          request.auth.uid == request.resource.data.expediteurId;
+
+        // Mise à jour (marquage lu) : être le destinataire uniquement
+        allow update: if request.auth != null &&
+          request.auth.uid == resource.data.destinataireId;
+      }
     }
 
     // Tâches : création libre (authentifié), lecture/modif/suppression

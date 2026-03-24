@@ -1,0 +1,146 @@
+$dark:    #111111;
+$lime:    #D4FF3F;
+$light:   #F9FAFB;
+$surface: #FFFFFF;
+$muted:   #6B7280;
+$border:  #E5E7EB;
+$radius:  16px;
+
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.chat-page {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  height: 100vh;
+  background: $light;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ---- SIDEBAR CONVERSATIONS ----
+.chat-sidebar {
+  border-right: 1px solid $border;
+  background: $surface;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid $border;
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0;
+  color: $dark;
+}
+
+.empty-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex: 1;
+  color: $muted;
+  padding: 40px 20px;
+  text-align: center;
+
+  svg { opacity: 0.4; }
+  p { font-size: 14px; margin: 0; }
+}
+
+// ---- ZONE MESSAGES ----
+.chat-main {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+// En-tête de la conversation active
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid $border;
+  background: $surface;
+  flex-shrink: 0;
+}
+
+.chat-header-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: $dark;
+  color: $lime;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.chat-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.chat-header-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: $dark;
+}
+
+.chat-header-role {
+  font-size: 12px;
+  color: $muted;
+}
+
+// État vide (aucune conversation sélectionnée)
+.chat-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex: 1;
+  color: $muted;
+  text-align: center;
+  padding: 40px;
+
+  svg { opacity: 0.25; }
+
+  .empty-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: $dark;
+    margin: 0;
+  }
+
+  .empty-subtitle {
+    font-size: 14px;
+    margin: 0;
+  }
+}

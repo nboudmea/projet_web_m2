@@ -1,0 +1,27 @@
+<form class="message-form" [formGroup]="form" (ngSubmit)="onSend()">
+  <textarea
+    class="message-textarea"
+    formControlName="contenu"
+    placeholder="Écrire un message… (Entrée pour envoyer, Shift+Entrée pour la ligne suivante)"
+    rows="1"
+    (keydown)="onKeydown($event)"
+  ></textarea>
+
+  <button
+    type="submit"
+    class="send-btn"
+    [disabled]="form.invalid || sending()"
+    title="Envoyer"
+  >
+    @if (sending()) {
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10" stroke-dasharray="31.4" stroke-dashoffset="10"/>
+      </svg>
+    } @else {
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"/>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    }
+  </button>
+</form>

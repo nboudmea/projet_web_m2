@@ -1,0 +1,42 @@
+<div class="message-list" #scrollContainer>
+
+  @if (messages().length === 0) {
+    <div class="no-messages">
+      <p>Aucun message pour l'instant. Commencez la conversation !</p>
+    </div>
+  }
+
+  @for (message of messages(); track message.id) {
+    <div
+      class="message-wrapper"
+      [class.sent]="message.expediteurId === currentUserId()"
+      [class.received]="message.expediteurId !== currentUserId()"
+    >
+      <div class="message-bubble">
+        <p class="message-content">{{ message.contenu }}</p>
+        <div class="message-meta">
+          <span class="message-time">
+            {{ message.dateEnvoi | timestampToDate | date:'HH:mm' }}
+          </span>
+          @if (message.expediteurId === currentUserId()) {
+            <span class="read-indicator" [class.read]="message.lu" [title]="message.lu ? 'Lu' : 'Envoyé'">
+              @if (message.lu) {
+                <!-- Double coche : lu -->
+                <svg width="14" height="10" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="1,6 5,10 9,2"/>
+                  <polyline points="7,6 11,10 15,2"/>
+                </svg>
+              } @else {
+                <!-- Simple coche : envoyé -->
+                <svg width="12" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="1,6 5,10 11,2"/>
+                </svg>
+              }
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

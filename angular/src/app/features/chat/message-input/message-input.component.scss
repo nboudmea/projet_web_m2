@@ -1,0 +1,67 @@
+$dark:   #111111;
+$lime:   #D4FF3F;
+$light:  #F9FAFB;
+$border: #E5E7EB;
+$muted:  #6B7280;
+
+.message-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 14px 16px;
+  border-top: 1px solid $border;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.message-textarea {
+  flex: 1;
+  resize: none;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+  background: $light;
+  color: $dark;
+  outline: none;
+  max-height: 120px;
+  overflow-y: auto;
+  transition: border-color 0.15s;
+
+  &::placeholder {
+    color: $muted;
+    font-size: 13px;
+  }
+
+  &:focus {
+    border-color: $dark;
+    background: #fff;
+  }
+}
+
+.send-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: none;
+  background: $dark;
+  color: $lime;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.15s, transform 0.1s;
+
+  &:hover:not(:disabled) {
+    opacity: 0.85;
+    transform: scale(1.04);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}

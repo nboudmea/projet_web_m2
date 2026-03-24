@@ -1,0 +1,37 @@
+<div class="conv-list">
+  @for (conv of conversations(); track conv.id) {
+    <button
+      type="button"
+      class="conv-item"
+      [class.selected]="conv.id === selectedId()"
+      (click)="onSelect(conv)"
+    >
+      <!-- Avatar -->
+      <div class="conv-avatar">
+        @if (conv.otherUser.photoUrl) {
+          <img [src]="conv.otherUser.photoUrl" [alt]="conv.otherUser.prenom || conv.otherUser.email" />
+        } @else {
+          <span>{{ (conv.otherUser.prenom || conv.otherUser.email || '?')[0].toUpperCase() }}{{ (conv.otherUser.nom || '')[0]?.toUpperCase() }}</span>
+        }
+      </div>
+
+      <!-- Infos conversation -->
+      <div class="conv-info">
+        <div class="conv-name-row">
+          <span class="conv-name">{{ conv.otherUser.prenom || conv.otherUser.email }} {{ conv.otherUser.nom }}</span>
+          @if (conv.lastMessageAt) {
+            <span class="conv-time">
+              {{ conv.lastMessageAt | timestampToDate | date:'HH:mm' }}
+            </span>
+          }
+        </div>
+        <div class="conv-last-row">
+          <span class="conv-last-msg">{{ conv.lastMessage || 'Aucun message' }}</span>
+          @if (conv.unreadCount > 0) {
+            <span class="unread-badge">{{ conv.unreadCount }}</span>
+          }
+        </div>
+      </div>
+    </button>
+  }
+</div>
