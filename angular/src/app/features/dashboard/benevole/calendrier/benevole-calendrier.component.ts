@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TimestampToDatePipe } from '../../../../shared/pipes/timestamp-to-date.pipe';
 import { AuthService } from '../../../../core/services/auth.service';
 import { TaskService } from '../../../../core/services/task.service';
@@ -43,7 +44,7 @@ export interface DayCell {
 @Component({
   selector: 'app-benevole-calendrier',
   standalone: true,
-  imports: [DatePipe, TimestampToDatePipe],
+  imports: [DatePipe, TimestampToDatePipe, ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './benevole-calendrier.component.html',
   styleUrl: './benevole-calendrier.component.scss',
@@ -53,9 +54,19 @@ export class BenevoleCalendrierComponent {
   private taskService = inject(TaskService);
   private calendarService = inject(CalendarService);
   private userService = inject(UserService);
+  private fb = inject(FormBuilder);
 
   private benevoleId = this.authService.currentUserId!;
   private today = new Date();
+
+  readonly creatingTask = signal(false);
+  readonly submitting   = signal(false);
+
+  readonly newTaskForm = this.fb.group({
+    assigneeId:  ['', Validators.required],
+    titre:       ['', Validators.required],
+    description: [''],
+  });
 
   readonly currentMonth = signal(
     new Date(this.today.getFullYear(), this.today.getMonth(), 1)
@@ -174,7 +185,13 @@ export class BenevoleCalendrierComponent {
 
   nomEleve(u: User | undefined): string {
     if (!u) return '—';
-    return `${u.prenom} ${u.nom}`;
+    const full = `${this.cap(u.prenom)} ${this.cap(u.nom)}`.trim();
+    return full || u.email || 'Élève inconnu';
+  }
+
+  private cap(s: string | undefined): string {
+    if (!s) return '';
+    return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
   assigneeName(task: Task): string {
@@ -221,5 +238,33 @@ export class BenevoleCalendrierComponent {
 
   toggle(task: Task): void {
     this.taskService.toggleTask(task.id, !task.terminee);
+  }
+
+  openCreate(): void {
+    this.newTaskForm.reset({ assigneeId: this.selectedEleveId() ?? '' });
+    this.creatingTask.set(true);
+  }
+
+  cancelCreate(): void {
+    this.creatingTask.set(false);
+  }
+
+  async submitNewTask(): Promise<void> {
+    if (this.newTaskForm.invalid) return;
+    const sel = this.selectedDate();
+    if (!sel) return;
+
+    this.submitting.set(true);
+    const { assigneeId, titre, description } = this.newTaskForm.getRawValue();
+    await this.taskService.createTask({
+      assigneeId:   assigneeId!,
+      createurId:   this.benevoleId,
+      titre:        titre!,
+      description:  description || undefined,
+      dateEcheance: sel,
+      terminee:     false,
+    });
+    this.submitting.set(false);
+    this.creatingTask.set(false);
   }
 }

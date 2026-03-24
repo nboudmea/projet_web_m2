@@ -45,6 +45,26 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
       <div class="field">
+        <label for="prenom">Prénom</label>
+        <input id="prenom" type="text" formControlName="prenom"
+          placeholder="Ton prénom"
+          [class.invalid]="prenom?.invalid && prenom?.touched" />
+        @if (prenom?.touched && prenom?.hasError('required')) {
+          <span class="field-error">Le prénom est obligatoire.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="nom">Nom</label>
+        <input id="nom" type="text" formControlName="nom"
+          placeholder="Ton nom"
+          [class.invalid]="nom?.invalid && nom?.touched" />
+        @if (nom?.touched && nom?.hasError('required')) {
+          <span class="field-error">Le nom est obligatoire.</span>
+        }
+      </div>
+
+      <div class="field">
         <label for="email">Email</label>
         <input id="email" type="email" formControlName="email"
           placeholder="ton@email.com"

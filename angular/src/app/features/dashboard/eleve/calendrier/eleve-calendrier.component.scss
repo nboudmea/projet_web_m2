@@ -380,3 +380,95 @@ $radius:  20px;
   margin: 0;
   line-height: 1.5;
 }
+// ── En-tête de section avec bouton + ─────────────────────────────
+
+.detail-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.btn-add-task {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: $dark;
+  color: $lime;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity .15s;
+
+  &:hover { opacity: .82; }
+}
+
+// ── Mini-formulaire rapide ───────────────────────────────
+
+.quick-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: $light;
+  border-radius: 12px;
+  border: 1.5px solid $border;
+}
+
+.quick-input {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  border: 1.5px solid $border;
+  border-radius: 8px;
+  background: $surface;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color .15s;
+
+  &:focus { border-color: $dark; }
+}
+
+.quick-select {
+  appearance: none;
+  cursor: pointer;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.quick-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid $border;
+  background: $surface;
+  color: $muted;
+  transition: border-color .15s, background .15s, color .15s;
+
+  &:hover:not(:disabled) {
+    border-color: $dark;
+    color: $dark;
+  }
+
+  &--primary {
+    background: $dark;
+    color: $lime;
+    border-color: $dark;
+
+    &:hover:not(:disabled) { opacity: .85; color: $lime; }
+    &:disabled { opacity: .5; cursor: not-allowed; }
+  }
+}

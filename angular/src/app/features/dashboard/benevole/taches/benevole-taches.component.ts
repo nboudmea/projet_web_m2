@@ -151,8 +151,13 @@ export class BenevoleTachesComponent {
   }
 
   nomEleve(eleve: User): string {
-    const full = `${eleve.prenom ?? ''} ${eleve.nom ?? ''}`.trim();
+    const full = `${this.cap(eleve.prenom)} ${this.cap(eleve.nom)}`.trim();
     return full || eleve.email || 'Élève inconnu';
+  }
+
+  private cap(s: string | undefined): string {
+    if (!s) return '';
+    return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
   /** Sélectionne/désélectionne un élève et pré-remplit le select du formulaire */

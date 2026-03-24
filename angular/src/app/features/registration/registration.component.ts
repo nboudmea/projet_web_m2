@@ -21,12 +21,16 @@ export class RegistrationComponent {
   errorMessage = signal<string | null>(null);
 
   form = this.fb.group({
+    prenom: ['', Validators.required],
+    nom:    ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', [Validators.required]],
     role: ['eleve' as 'eleve' | 'benevole', Validators.required],
   }, { validators: this.passwordsMatchValidator() });
 
+  get prenom() { return this.form.get('prenom'); }
+  get nom()    { return this.form.get('nom'); }
   get email() { return this.form.get('email'); }
   get password() { return this.form.get('password'); }
   get confirmPassword() { return this.form.get('confirmPassword'); }
@@ -52,6 +56,8 @@ export class RegistrationComponent {
         this.email!.value!,
         this.password!.value!,
         this.role!.value as 'eleve' | 'benevole',
+        this.prenom!.value!,
+        this.nom!.value!,
       );
       this.router.navigate(['/dashboard']);
     } catch (error: any) {

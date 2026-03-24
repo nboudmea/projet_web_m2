@@ -6,11 +6,12 @@ import { TaskService } from '../../../../core/services/task.service';
 import { UserService } from '../../../../core/services/user.service';
 import { Task } from '../../../../core/models/task.model';
 import { User } from '../../../../core/models/user.model';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-benevole-accueil',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './benevole-accueil.component.html',
   styleUrl: './benevole-accueil.component.scss',
@@ -21,6 +22,8 @@ export class BenevoleAccueilComponent {
   private userService = inject(UserService);
 
   private benevoleId = this.authService.currentUserId!;
+
+  readonly currentUser$ = this.authService.currentAppUser$;
 
   readonly eleves = toSignal(
     this.userService.getElevesOfBenevole$(this.benevoleId),
@@ -46,7 +49,12 @@ export class BenevoleAccueilComponent {
   }
 
   nomEleve(eleve: User): string {
-    const full = `${eleve.prenom ?? ''} ${eleve.nom ?? ''}`.trim();
+    const full = `${this.cap(eleve.prenom)} ${this.cap(eleve.nom)}`.trim();
     return full || eleve.email || 'Élève sans nom';
+  }
+
+  cap(s: string | undefined): string {
+    if (!s) return '';
+    return s.charAt(0).toUpperCase() + s.slice(1);
   }
 }

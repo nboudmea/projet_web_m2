@@ -38,7 +38,7 @@ export class AuthService {
     return signOut(this.auth);
   }
 
-  register(email: string, password: string, role: 'eleve' | 'benevole'): Promise<void> {
+  register(email: string, password: string, role: 'eleve' | 'benevole', prenom = '', nom = ''): Promise<void> {
     return createUserWithEmailAndPassword(this.auth, email, password)
       .then(async userCredential => {
         const user = userCredential.user;
@@ -52,6 +52,8 @@ export class AuthService {
 
         return setDoc(userDoc, {
           email: user.email,
+          prenom,
+          nom,
           role,
           ...(benevoleId ? { benevoleId } : {}),
           createdAt: serverTimestamp(),

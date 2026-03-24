@@ -2,7 +2,11 @@
 
   <header class="page-header">
     <div>
-      <h1>Bonjour 👋</h1>
+      @if (currentUser$ | async; as user) {
+        <h1>Bonjour, {{ cap(user.prenom) || user.email }} 👋</h1>
+      } @else {
+        <h1>Bonjour 👋</h1>
+      }
       <p class="subtitle">Vue d'ensemble de vos élèves et tâches</p>
     </div>
     <span class="badge-role">Bénévole</span>
