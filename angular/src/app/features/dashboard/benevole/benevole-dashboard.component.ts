@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-benevole-dashboard',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './benevole-dashboard.component.html',
   styleUrl: './benevole-dashboard.component.scss',
@@ -13,6 +14,8 @@ import { AuthService } from '../../../core/services/auth.service';
 export class BenevoleDashboardComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  readonly currentUser$ = this.authService.currentAppUser$;
 
   readonly navItems = [
     { label: 'Accueil',     path: 'accueil',     icon: 'home' },

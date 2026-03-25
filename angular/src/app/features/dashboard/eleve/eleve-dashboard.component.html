@@ -34,12 +34,38 @@
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                 </svg>
               }
+              @case ('profile') {
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="4"/>
+                  <path d="M20 21a8 8 0 1 0-16 0"/>
+                </svg>
+              }
             }
           </span>
           <span class="nav-label">{{ item.label }}</span>
         </a>
       }
     </nav>
+
+    <!-- Bouton profil (bas de sidebar) -->
+    @if (currentUser$ | async; as user) {
+      <a class="sidebar-profile" routerLink="profil" routerLinkActive="active" title="Mon profil">
+        <div class="sidebar-profile-avatar">
+          @if (user.photoUrl) {
+            <img [src]="user.photoUrl" alt="Photo de profil" />
+          } @else {
+            <span>{{ (user.prenom || '?')[0].toUpperCase() }}{{ (user.nom || '')[0]?.toUpperCase() }}</span>
+          }
+        </div>
+        <div class="sidebar-profile-info">
+          <span class="sidebar-profile-name">{{ user.prenom }} {{ user.nom }}</span>
+          <span class="sidebar-profile-role">Élève</span>
+        </div>
+        <svg class="sidebar-profile-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </a>
+    }
 
     <button class="sidebar-logout" (click)="logout()" title="Se déconnecter">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

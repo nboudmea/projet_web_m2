@@ -1,6 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, authState, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, createUserWithEmailAndPassword } from '@angular/fire/auth';
-import { Firestore, doc, setDoc, getDoc, getDocs, collection, query, where, serverTimestamp } from '@angular/fire/firestore';
+import {
+  Auth, authState, signInWithEmailAndPassword, signOut, sendPasswordResetEmail,
+  createUserWithEmailAndPassword, reauthenticateWithCredential, EmailAuthProvider,
+  updateEmail, updatePassword,
+} from '@angular/fire/auth';
+import { Firestore, doc, setDoc, getDoc, getDocs, updateDoc, collection, query, where, serverTimestamp } from '@angular/fire/firestore';
 import { Observable, of, switchMap, from, map } from 'rxjs';
 import { User } from '../models/user.model';
 
@@ -108,5 +112,29 @@ export class AuthService {
     // La récupération précise du rôle se fait via Firestore ;
     // ici on renvoie une valeur par défaut safe pendant le chargement.
     return 'eleve';
+  }
+
+  /**
+   * Change l'adresse email (nécessite une réauthentification).
+   * Met également à jour le champ email dans Firestore.
+   */
+  async changeEmail(newEmail: string, currentPassword: string): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user || !user.email) throw new Error('Utilisateur non connecté');
+    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+    await updateEmail(user, newEmail);
+    await updateDoc(doc(this.firestore, `users/${user.uid}`), { email: newEmail });
+  }
+
+  /**
+   * Change le mot de passe (nécessite une réauthentification).
+   */
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user || !user.email) throw new Error('Utilisateur non connecté');
+    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+    await updatePassword(user, newPassword);
   }
 }

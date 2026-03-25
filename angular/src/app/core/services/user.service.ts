@@ -5,6 +5,7 @@ import {
   collectionData,
   doc,
   getDoc,
+  updateDoc,
   query,
   where,
 } from '@angular/fire/firestore';
@@ -34,5 +35,21 @@ export class UserService {
     return from(getDoc(doc(this.firestore, `users/${uid}`))).pipe(
       map(snap => snap.exists() ? ({ id: snap.id, ...snap.data() } as User) : null)
     );
+  }
+
+  /**
+   * Met à jour la photo de profil d'un utilisateur.
+   * @param uid UID Firestore de l'utilisateur
+   * @param photoUrl Data-URL base64 de l'image compressée
+   */
+  updatePhotoUrl(uid: string, photoUrl: string): Promise<void> {
+    return updateDoc(doc(this.firestore, `users/${uid}`), { photoUrl });
+  }
+
+  /**
+   * Met à jour le prénom et le nom d'un utilisateur.
+   */
+  updateProfile(uid: string, data: { prenom: string; nom: string }): Promise<void> {
+    return updateDoc(doc(this.firestore, `users/${uid}`), { ...data });
   }
 }

@@ -1,0 +1,148 @@
+<div class="page">
+
+  <header class="page-header">
+    <div>
+      <h1>Mon profil</h1>
+      <p class="subtitle">Gérer vos informations personnelles et votre sécurité</p>
+    </div>
+    @if (user(); as u) {
+      <span class="badge-role">{{ u.role === 'benevole' ? 'Bénévole' : 'Élève' }}</span>
+    }
+  </header>
+
+  @if (user(); as u) {
+
+    <!-- Avatar -->
+    <div class="avatar-card">
+      <app-avatar-upload
+        [uid]="u.id"
+        [photoUrl]="u.photoUrl"
+        [prenom]="u.prenom"
+        [nom]="u.nom"
+      />
+      <div class="avatar-card-info">
+        <p class="avatar-card-name">{{ u.prenom }} {{ u.nom }}</p>
+        <p class="avatar-card-email">{{ u.email }}</p>
+        <p class="avatar-card-hint">Cliquez sur l'avatar pour changer votre photo</p>
+      </div>
+    </div>
+
+    <!-- Infos personnelles -->
+    <section class="profile-card">
+      <h2 class="card-title">Informations personnelles</h2>
+
+      <form [formGroup]="infoForm" (ngSubmit)="saveInfo()" class="form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input id="prenom" type="text" formControlName="prenom" placeholder="Votre prénom" />
+            @if (infoForm.get('prenom')?.invalid && infoForm.get('prenom')?.touched) {
+              <span class="field-error">Le prénom est requis.</span>
+            }
+          </div>
+          <div class="form-group">
+            <label for="nom">Nom</label>
+            <input id="nom" type="text" formControlName="nom" placeholder="Votre nom" />
+            @if (infoForm.get('nom')?.invalid && infoForm.get('nom')?.touched) {
+              <span class="field-error">Le nom est requis.</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email actuel</label>
+          <input type="email" [value]="u.email" disabled class="input-disabled" />
+        </div>
+
+        @if (infoError()) {
+          <p class="alert alert--error">{{ infoError() }}</p>
+        }
+        @if (infoSuccess()) {
+          <p class="alert alert--success">✓ Informations mises à jour avec succès.</p>
+        }
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="infoForm.invalid || infoSaving()">
+            {{ infoSaving() ? 'Enregistrement…' : 'Enregistrer' }}
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Changer l'email -->
+    <section class="profile-card">
+      <h2 class="card-title">Changer l'adresse email</h2>
+      <p class="card-desc">Votre mot de passe actuel sera requis pour confirmer la modification.</p>
+
+      <form [formGroup]="emailForm" (ngSubmit)="saveEmail()" class="form">
+        <div class="form-group">
+          <label for="newEmail">Nouvelle adresse email</label>
+          <input id="newEmail" type="email" formControlName="newEmail" placeholder="nouvelle@email.com" />
+          @if (emailForm.get('newEmail')?.invalid && emailForm.get('newEmail')?.touched) {
+            <span class="field-error">Email invalide.</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="passwordForEmail">Mot de passe actuel</label>
+          <input id="passwordForEmail" type="password" formControlName="passwordForEmail" placeholder="••••••••" />
+        </div>
+
+        @if (emailError()) {
+          <p class="alert alert--error">{{ emailError() }}</p>
+        }
+        @if (emailSuccess()) {
+          <p class="alert alert--success">✓ Adresse email mise à jour.</p>
+        }
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="emailForm.invalid || emailSaving()">
+            {{ emailSaving() ? 'Modification…' : 'Modifier l\'email' }}
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Changer le mot de passe -->
+    <section class="profile-card">
+      <h2 class="card-title">Changer le mot de passe</h2>
+      <p class="card-desc">Le mot de passe doit comporter au moins 6 caractères.</p>
+
+      <form [formGroup]="pwForm" (ngSubmit)="savePassword()" class="form">
+        <div class="form-group">
+          <label for="currentPw">Mot de passe actuel</label>
+          <input id="currentPw" type="password" formControlName="currentPassword" placeholder="••••••••" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="newPw">Nouveau mot de passe</label>
+            <input id="newPw" type="password" formControlName="newPassword" placeholder="••••••••" />
+            @if (pwForm.get('newPassword')?.hasError('minlength') && pwForm.get('newPassword')?.touched) {
+              <span class="field-error">Minimum 6 caractères.</span>
+            }
+          </div>
+          <div class="form-group">
+            <label for="confirmPw">Confirmer le mot de passe</label>
+            <input id="confirmPw" type="password" formControlName="confirmPassword" placeholder="••••••••" />
+          </div>
+        </div>
+
+        @if (pwError()) {
+          <p class="alert alert--error">{{ pwError() }}</p>
+        }
+        @if (pwSuccess()) {
+          <p class="alert alert--success">✓ Mot de passe modifié avec succès.</p>
+        }
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="pwForm.invalid || pwSaving()">
+            {{ pwSaving() ? 'Modification…' : 'Modifier le mot de passe' }}
+          </button>
+        </div>
+      </form>
+    </section>
+
+  } @else {
+    <div class="loading">Chargement du profil…</div>
+  }
+
+</div>

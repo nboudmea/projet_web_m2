@@ -1,0 +1,29 @@
+<div class="avatar-wrapper" (click)="openPicker()" [class.uploading]="uploading()" title="Changer la photo de profil">
+
+  <div class="avatar">
+    @if (photoUrl) {
+      <img [src]="photoUrl" alt="Photo de profil" />
+    } @else {
+      <span class="initials">{{ initials }}</span>
+    }
+
+    <div class="overlay">
+      @if (uploading()) {
+        <span class="spinner"></span>
+      } @else {
+        <!-- icône appareil photo -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      }
+    </div>
+  </div>
+
+  <input #fileInput type="file" accept="image/*" hidden (change)="onFileSelected($event)" />
+</div>
+
+@if (error()) {
+  <p class="avatar-error">{{ error() }}</p>
+}
