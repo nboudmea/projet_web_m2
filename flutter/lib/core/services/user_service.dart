@@ -27,4 +27,21 @@ class UserService {
         .snapshots()
         .map((snap) => snap.exists ? AppUser.fromDoc(snap) : null);
   }
+
+  /// Met à jour le profil (nom, prénom) dans Firestore.
+  Future<void> updateProfile(String uid,
+      {required String nom, required String prenom}) async {
+    await _db.collection('users').doc(uid).update({
+      'nom': nom,
+      'prenom': prenom,
+    });
+  }
+
+  /// Met à jour l'URL de la photo de profil dans Firestore.
+  Future<void> updatePhotoUrl(String uid, String photoUrl) async {
+    await _db
+        .collection('users')
+        .doc(uid)
+        .update({'photoUrl': photoUrl});
+  }
 }

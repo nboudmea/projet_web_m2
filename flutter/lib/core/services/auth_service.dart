@@ -74,6 +74,33 @@ class AuthService {
     await _auth.sendPasswordResetEmail(email: email);
   }
 
+  /// Ré-authentifie l'utilisateur avant une opération sensible.
+  Future<void> reauthenticate(String password) async {
+    final user = _auth.currentUser;
+    if (user == null || user.email == null) return;
+    final credential = EmailAuthProvider.credential(
+      email: user.email!,
+      password: password,
+    );
+    await user.reauthenticateWithCredential(credential);
+  }
+
+  /// Met à jour l'email Firebase Auth + le champ Firestore.
+  Future<void> updateEmail(String newEmail) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+    await user.verifyBeforeUpdateEmail(newEmail);
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .update({'email': newEmail});
+  }
+
+  /// Met à jour le mot de passe Firebase Auth.
+  Future<void> updatePassword(String newPassword) async {
+    await _auth.currentUser?.updatePassword(newPassword);
+  }
+
   // ─── Helpers Firestore ──────────────────────────────────────────────────────
 
   /// Récupère le document AppUser depuis Firestore

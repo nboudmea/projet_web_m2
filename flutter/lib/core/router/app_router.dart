@@ -6,6 +6,8 @@ import '../../features/login/screens/login_screen.dart';
 import '../../features/registration/screens/registration_screen.dart';
 import '../../features/dashboard/eleve/screens/eleve_dashboard_screen.dart';
 import '../../features/dashboard/benevole/screens/benevole_dashboard_screen.dart';
+import '../../features/chat/screens/chat_screen.dart';
+import '../../features/profile/screens/profile_screen.dart';
 
 // ─── RouterNotifier (ChangeNotifier) ─────────────────────────────────────────
 
@@ -39,7 +41,6 @@ class _RouterNotifier extends ChangeNotifier {
 
     // --- AUTH GUARD : redirige vers /login si non connecté ---
     if (!isLoggedIn && !isPublicRoute) return '/login';
-
     // --- ROLE REDIRECT GUARD : depuis /dashboard, redirige selon le rôle ---
     if (isLoggedIn && location == '/dashboard') {
       if (userState.isLoading) return null;
@@ -93,6 +94,16 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const BenevoleDashboardScreen(),
           ),
         ],
+      ),
+
+      // ── Routes protégées top-level ────────────────────────────────────────
+      GoRoute(
+        path: '/chat',
+        builder: (context, state) => const ChatScreen(),
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) => const ProfileScreen(),
       ),
     ],
   );

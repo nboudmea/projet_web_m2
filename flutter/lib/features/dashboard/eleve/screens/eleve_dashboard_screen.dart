@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/providers/auth_providers.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../chat/screens/chat_screen.dart';
 import 'eleve_accueil_screen.dart';
+import 'eleve_calendrier_screen.dart';
 import 'eleve_taches_screen.dart';
 
 /// Shell de navigation de l'élève.
@@ -53,6 +56,15 @@ class _EleveDashboardScreenState
         ),
         actions: [
           Semantics(
+            label: 'Mon profil',
+            child: IconButton(
+              icon: const Icon(Icons.person_outline_rounded,
+                  color: Colors.white),
+              tooltip: 'Mon profil',
+              onPressed: () => context.push('/profile'),
+            ),
+          ),
+          Semantics(
             label: 'Se déconnecter',
             child: IconButton(
               icon: const Icon(Icons.logout_rounded,
@@ -70,6 +82,8 @@ class _EleveDashboardScreenState
         children: [
           EleveAccueilScreen(onGoToTaches: _goToTaches),
           const EleveTachesScreen(),
+          const EleveCalendrierScreen(),
+          const ChatScreen(),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -85,6 +99,16 @@ class _EleveDashboardScreenState
             icon: Icon(Icons.check_box_outlined),
             selectedIcon: Icon(Icons.check_box_rounded),
             label: 'Tâches',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.calendar_today_outlined),
+            selectedIcon: Icon(Icons.calendar_today_rounded),
+            label: 'Calendrier',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.chat_bubble_outline_rounded),
+            selectedIcon: Icon(Icons.chat_bubble_rounded),
+            label: 'Chat',
           ),
         ],
       ),
